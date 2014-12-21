@@ -19,3 +19,16 @@ version = "0.0.4"
 ```
 
 The `rustdoc` is available on [Rust CI](http://rust-ci.org/robo9k/rust-magic-sys/doc/magic-sys/).
+
+# Requirements
+
+`libmagic` needs to be installed in a standard location (also see [issue #1](https://github.com/robo9k/rust-magic-sys/issues/1)).
+
+On a Debian based Linux system this can be achieved like this:
+```sh
+sudo apt-get install libmagic1
+```
+
+On RHEL/Cent OS, Gentoo and others you will need to install the `file` package.
+
+Feedback for Windows ([issue #2](https://github.com/robo9k/rust-magic-sys/issues/2)) and OS X ([issue #3](https://github.com/robo9k/rust-magic-sys/issues/3)) support is appreciated!
