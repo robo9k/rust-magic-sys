@@ -6,6 +6,7 @@ rust-magic-sys [![Build Status](https://travis-ci.org/robo9k/rust-magic-sys.svg?
 ---
 
 This [cargo -sys package](http://doc.crates.io/build-script.html#*-sys-packages) provides `libmagic` declarations for e.g. the [`magic` binding](https://github.com/robo9k/rust-magic).
+Licensed under the MIT license (see `LICENSE`).
 
 
 # Usage
