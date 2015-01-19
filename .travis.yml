@@ -1,15 +1,18 @@
 language: rust
 env:
   global:
-    - secure: HRSy8ISmoYsdp2Sf4J0KXOs6a3xHU1dF4orSoOhewDM2wFRgO45VVzPnfEm0I3qMi72UQi+FmM1APHnbBrMhXLU2sMn/qE5Zy8uW5hmDTkFVBiUcOqYnrHLv8mKTl20ze/Rd8+DHEF0IYaObSX9317O8DZChepoHkOiHkR3rlB0=
+    secure: m/9uIj9YUvDtVj4qelwVCYzXbaJ3M+zqeazDXDrvClIB6CSt1PaPxcKSdcUPm74+9CBKBX6XRxjz8M1Dgtu1nHPfP8BzcyAgXcpGYpBkIW1cjcwi6p9LRQS7Dg3VWZlAgSvEqEDSOLjCxtmtQ2Spea4CrLfq2nsO2O86hbSsi6M=
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libmagic1 libmagic-dev
+- sudo apt-get update -qq
+- sudo apt-get install -qq libmagic1 libmagic-dev
 script:
-  - cargo build --verbose
-  - cargo test --verbose
-  - cargo doc --verbose
-after_script:
-  # the doc directory needs to be in the root for rust-ci
-  - mv target/doc doc
-  - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
+- cargo build --verbose
+- cargo test --verbose
+- cargo doc --verbose
+after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  echo '<meta http-equiv=refresh content=0;url=magic-sys/index.html>' > target/doc/index.html &&
+  sudo pip install ghp-import &&
+  ghp-import -n target/doc &&
+  git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages

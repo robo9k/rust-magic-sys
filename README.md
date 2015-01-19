@@ -18,7 +18,7 @@ Licensed under the MIT license (see `LICENSE`).
 version = "0.0.4"
 ```
 
-The `rustdoc` is available on [Rust CI](http://rust-ci.org/robo9k/rust-magic-sys/doc/magic-sys/).
+The `rustdoc` is available on [GitHub Pages](https://robo9k.github.io/rust-magic-sys/magic-sys/).
 
 # Requirements
 
