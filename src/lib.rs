@@ -1,9 +1,9 @@
+#![feature(libc)]
+
 extern crate libc;
 use libc::{c_char, c_int, size_t};
 
 pub enum Magic {}
-
-impl Copy for Magic {}
 
 extern "C" {
     pub fn magic_open(flags: c_int) -> *const Magic;
