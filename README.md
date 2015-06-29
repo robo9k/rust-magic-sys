@@ -15,10 +15,10 @@ Licensed under the MIT license (see `LICENSE`).
 
 ```toml
 [dependencies.magic-sys]
-version = "0.0.4"
+version = "0.0.8"
 ```
 
-The `rustdoc` is available on [GitHub Pages](https://robo9k.github.io/rust-magic-sys/magic-sys/).
+The `rustdoc` is available on [GitHub Pages](https://robo9k.github.io/rust-magic-sys/magic_sys/).
 
 # Requirements
 
