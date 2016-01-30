@@ -14,8 +14,8 @@ Licensed under the MIT license (see `LICENSE`).
 [`magic-sys` is available on crates.io](https://crates.io/crates/magic-sys) so you can use it like this (in your `Cargo.toml`):
 
 ```toml
-[dependencies.magic-sys]
-version = "0.0.8"
+[dependencies]
+magic-sys = "0.1.0"
 ```
 
 The `rustdoc` is available on [GitHub Pages](https://robo9k.github.io/rust-magic-sys/magic_sys/).
