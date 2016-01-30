@@ -6,7 +6,6 @@ rust-magic-sys [![Build Status](https://travis-ci.org/robo9k/rust-magic-sys.svg?
 ---
 
 This [cargo -sys package](http://doc.crates.io/build-script.html#*-sys-packages) provides `libmagic` declarations for e.g. the [`magic` binding](https://github.com/robo9k/rust-magic).
-Licensed under the MIT license (see `LICENSE`).
 
 
 # Usage
@@ -38,6 +37,7 @@ Feedback for Windows ([issue #2](https://github.com/robo9k/rust-magic-sys/issues
 Licensed under either of
  * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
  * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+
 at your option.
 
 ## Contribution
