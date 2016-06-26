@@ -1,4 +1,6 @@
+sudo: false
 language: rust
+cache: cargo
 rust:
   - stable
   - beta
@@ -9,9 +11,10 @@ matrix:
 env:
   global:
     secure: m/9uIj9YUvDtVj4qelwVCYzXbaJ3M+zqeazDXDrvClIB6CSt1PaPxcKSdcUPm74+9CBKBX6XRxjz8M1Dgtu1nHPfP8BzcyAgXcpGYpBkIW1cjcwi6p9LRQS7Dg3VWZlAgSvEqEDSOLjCxtmtQ2Spea4CrLfq2nsO2O86hbSsi6M=
-before_install:
-- sudo apt-get update -qq
-- sudo apt-get install -qq libmagic1 libmagic-dev
+addons:
+  apt:
+    packages:
+      - libmagic-dev
 script:
 - cargo build --verbose
 - cargo test --verbose
