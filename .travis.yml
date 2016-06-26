@@ -1,4 +1,11 @@
 language: rust
+rust:
+  - stable
+  - beta
+  - nightly
+matrix:
+  allow_failures:
+    - rust: nightly
 env:
   global:
     secure: m/9uIj9YUvDtVj4qelwVCYzXbaJ3M+zqeazDXDrvClIB6CSt1PaPxcKSdcUPm74+9CBKBX6XRxjz8M1Dgtu1nHPfP8BzcyAgXcpGYpBkIW1cjcwi6p9LRQS7Dg3VWZlAgSvEqEDSOLjCxtmtQ2Spea4CrLfq2nsO2O86hbSsi6M=
