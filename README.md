@@ -30,7 +30,13 @@ sudo apt-get install libmagic1
 
 On RHEL/Cent OS, Gentoo and others you will need to install the `file` package.
 
-Feedback for Windows ([issue #2](https://github.com/robo9k/rust-magic-sys/issues/2)) and OS X ([issue #3](https://github.com/robo9k/rust-magic-sys/issues/3)) support is appreciated!
+
+On Mac OS X you can use [Homebrew](http://brew.sh/):
+```sh
+brew install libmagic
+```
+
+Feedback for Windows ([issue #2](https://github.com/robo9k/rust-magic-sys/issues/2)) support is appreciated!
 
 # License
 
