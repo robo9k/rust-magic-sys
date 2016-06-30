@@ -14,7 +14,7 @@ This [cargo -sys package](http://doc.crates.io/build-script.html#*-sys-packages)
 
 ```toml
 [dependencies]
-magic-sys = "0.1.0"
+magic-sys = "0.2.0"
 ```
 
 The `rustdoc` is available on [GitHub Pages](https://robo9k.github.io/rust-magic-sys/magic_sys/).
