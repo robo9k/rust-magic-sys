@@ -1,3 +1,5 @@
+#![feature(libc)]
+
 extern crate libc;
 use libc::{c_char, c_int, size_t};
 
