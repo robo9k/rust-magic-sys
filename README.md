@@ -25,7 +25,7 @@ The `rustdoc` is available on [GitHub Pages](https://robo9k.github.io/rust-magic
 
 On a Debian based Linux system this can be achieved like this:
 ```sh
-sudo apt-get install libmagic1
+sudo apt-get install libmagic1 libmagic-dev
 ```
 
 On RHEL/Cent OS, Gentoo and others you will need to install the `file` package.
@@ -37,6 +37,19 @@ brew install libmagic
 ```
 
 Feedback for Windows ([issue #2](https://github.com/robo9k/rust-magic-sys/issues/2)) support is appreciated!
+
+# Building
+
+By default `libmagic` will be searched in the system library paths. If you need to use a different library or are cross-compiling, you can set the `MAGIC_DIR` and `MAGIC_STATIC` environment variables.
+
+## `MAGIC_DIR`, `<TARGET>_MAGIC_DIR`
+Tells `rustc` where to find `libmagic.so` / `libmagic.a`. Can have a target-specific prefix like `X86_64_UNKNOWN_LINUX_MUSL_MAGIC_DIR`
+
+## `MAGIC_STATIC`, `<TARGET>_MAGIC_STATIC`
+Controls static linking with `libmagic`. Enabled automatically if there's only a `libmagic.a` in the (provided) search path or if explicitly enabled like `MAGIC_STATIC=true`. Can have a target-specific prefix like `X86_64_UNKNOWN_LINUX_MUSL_MAGIC_STATIC`
+
+Similarly `MAGIC_STATIC=false` can be used to choose to link `libmagic` dynamically.
+If unset but both libraries are available, the build will bail out with an error and you have to set one option explicitly.
 
 # License
 
