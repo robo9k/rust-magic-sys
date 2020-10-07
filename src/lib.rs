@@ -16,4 +16,5 @@ extern "C" {
     pub fn magic_compile(cookie: *const Magic, filename: *const c_char) -> c_int;
     pub fn magic_list(cookie: *const Magic, filename: *const c_char) -> c_int;
     pub fn magic_load(cookie: *const Magic, filename: *const c_char) -> c_int;
+    pub fn magic_load_buffers(cookie: *const Magic, buffers: *const *const u8, sizes: *const size_t, nbuffers: size_t) -> c_int;
 }
