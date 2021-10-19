@@ -44,6 +44,10 @@ fn main() {
             }
         }
     } else {
+        if let Err(err) = vcpkg::find_package("libmagic") {
+            println!("Could not find vcpkg package: {}", err);
+        }
+
         println!("cargo:rustc-link-lib=dylib=magic");
     }
 }

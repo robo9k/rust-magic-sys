@@ -38,6 +38,14 @@ brew install libmagic
 
 Feedback for Windows ([issue #2](https://github.com/robo9k/rust-magic-sys/issues/2)) support is appreciated!
 
+You can use Microsoft's [`vcpkg`](https://vcpkg.io) via [`vcpkg-rs`](https://docs.rs/vcpkg) and [`cargo-vcpkg`](https://crates.io/crates/cargo-vcpkg).
+If you choose the latter, that means you'll have to:
+```sh
+cargo install cargo-vcpkg
+cargo vcpkg build
+```
+Afterwards, you can `cargo build` etc. your crate as usual.
+
 # Building
 
 By default `libmagic` will be searched in the system library paths. If you need to use a different library or are cross-compiling, you can set the `MAGIC_DIR` and `MAGIC_STATIC` environment variables.
@@ -50,6 +58,12 @@ Controls static linking with `libmagic`. Enabled automatically if there's only a
 
 Similarly `MAGIC_STATIC=false` can be used to choose to link `libmagic` dynamically.
 If unset but both libraries are available, the build will bail out with an error and you have to set one option explicitly.
+
+## vcpkg
+The optional `vcpkg` integration has its own set of environment variables, see [`vcpkg` crate docs](https://docs.rs/vcpkg/#environment-variables).
+If you do not use `cargo vcpkg build`, you will have to either
+* `vcpkg install libmagic` and set the environment variables for your `vcpkg` root directory
+* `vcpkg integrate install` your `vcpkg` root user-wide
 
 # License
 
