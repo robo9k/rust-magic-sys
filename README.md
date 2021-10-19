@@ -17,7 +17,7 @@ This [cargo -sys package](http://doc.crates.io/build-script.html#*-sys-packages)
 magic-sys = "0.2.0"
 ```
 
-The `rustdoc` is available on [GitHub Pages](https://robo9k.github.io/rust-magic-sys/magic_sys/).
+The `rustdoc` is available on [docs.rs](https://docs.rs/magic-sys).
 
 # Requirements
 

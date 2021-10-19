@@ -7,8 +7,6 @@ keywords = [
     "magic",
     "file",
 ]
-homepage = "https://github.com/robo9k/rust-magic-sys"
-documentation = "https://robo9k.github.io/rust-magic-sys/magic-sys/"
 repository = "https://github.com/robo9k/rust-magic-sys.git"
 license = "MIT/Apache-2.0"
 version = "0.2.1"
