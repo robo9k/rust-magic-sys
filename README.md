@@ -1,4 +1,4 @@
-rust-magic-sys [![Build Status](https://travis-ci.org/robo9k/rust-magic-sys.svg?branch=master)](https://travis-ci.org/robo9k/rust-magic-sys)
+rust-magic-sys [![build status](https://github.com/robo9k/rust-magic-sys/actions/workflows/rust.yml/badge.svg)](https://github.com/robo9k/rust-magic-sys/actions/workflows/rust.yml)
 ==============
 
 [Rust](http://www.rust-lang.org/) declarations for [libmagic](http://darwinsys.com/file/).

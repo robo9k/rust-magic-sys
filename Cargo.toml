@@ -15,7 +15,7 @@ links = "magic"
 build = "build.rs"
 exclude = [
     ".gitignore",
-    ".travis.yml",
+    "/.github/",
 ]
 
 [dependencies]
