@@ -1,4 +1,4 @@
-rust-magic-sys [![build status](https://github.com/robo9k/rust-magic-sys/actions/workflows/linux.yml/badge.svg)](https://github.com/robo9k/rust-magic-sys/actions/workflows/linux.yml)
+rust-magic-sys [![linux build status](https://github.com/robo9k/rust-magic-sys/actions/workflows/linux.yml/badge.svg)](https://github.com/robo9k/rust-magic-sys/actions/workflows/linux.yml) [![windows build status](https://github.com/robo9k/rust-magic-sys/actions/workflows/windows.yml/badge.svg)](https://github.com/robo9k/rust-magic-sys/actions/workflows/windows.yml)
 ==============
 
 [Rust](http://www.rust-lang.org/) declarations for [libmagic](http://darwinsys.com/file/).
