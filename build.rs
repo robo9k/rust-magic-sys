@@ -17,7 +17,10 @@ fn main() {
         if !std::path::Path::new(&magic_dir).exists() {
             panic!("Magic library directory {:?} does not exist", magic_dir);
         }
-        println!("cargo:rustc-link-search=native={}", magic_dir.to_string_lossy());
+        println!(
+            "cargo:rustc-link-search=native={}",
+            magic_dir.to_string_lossy()
+        );
 
         let static_lib = magic_dir.join("libmagic.a");
         let shared_lib = magic_dir.join("libmagic.so");
