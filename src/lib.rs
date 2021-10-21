@@ -1,5 +1,5 @@
 extern crate libc;
-use libc::{c_char, c_int, size_t};
+use libc::{c_char, c_int, c_void, size_t};
 
 // `libmagic` API as in "magic.h"
 
@@ -86,6 +86,15 @@ extern "C" {
     pub fn magic_version() -> c_int;
     #[must_use]
     pub fn magic_load(cookie: *const Magic, filename: *const c_char) -> c_int;
+    #[cfg(feature = "libmagic-abi-v520")]
+    #[must_use]
+    pub fn magic_load_buffers(
+        cookie: *const Magic,
+        buffers: *const *const c_void,
+        sizes: *const size_t,
+        nbuffers: size_t,
+    ) -> c_int;
+
     #[must_use]
     pub fn magic_compile(cookie: *const Magic, filename: *const c_char) -> c_int;
     #[must_use]
