@@ -1,7 +1,12 @@
 extern crate libc;
 use libc::{c_char, c_int, size_t};
 
-pub enum Magic {}
+// https://doc.rust-lang.org/nomicon/ffi.html#representing-opaque-structs
+#[repr(C)]
+pub struct Magic {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
 
 extern "C" {
     pub fn magic_open(flags: c_int) -> *const Magic;
