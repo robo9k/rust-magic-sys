@@ -35,8 +35,18 @@ pub const MAGIC_NO_CHECK_CDF: c_int = 0x040000;
 pub const MAGIC_NO_CHECK_TOKENS: c_int = 0x100000;
 pub const MAGIC_NO_CHECK_ENCODING: c_int = 0x200000;
 
-#[cfg(feature = "libmagic-abi-v505")]
+#[cfg(all(feature = "libmagic-abi-v505", not(feature = "libmagic-abi-v510")))]
 pub const MAGIC_NO_CHECK_BUILTIN: c_int = 0x3fb000;
+#[cfg(feature = "libmagic-abi-v510")]
+pub const MAGIC_NO_CHECK_BUILTIN: c_int = MAGIC_NO_CHECK_COMPRESS |
+MAGIC_NO_CHECK_TAR      |
+/* MAGIC_NO_CHECK_SOFT | */
+MAGIC_NO_CHECK_APPTYPE  |
+MAGIC_NO_CHECK_ELF      |
+MAGIC_NO_CHECK_TEXT     |
+MAGIC_NO_CHECK_CDF      |
+MAGIC_NO_CHECK_TOKENS   |
+MAGIC_NO_CHECK_ENCODING;
 
 #[deprecated]
 pub const MAGIC_NO_CHECK_ASCII: c_int = MAGIC_NO_CHECK_TEXT;

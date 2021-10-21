@@ -25,9 +25,10 @@ exclude = [
 rust-version = "1.38"
 
 [features]
-default = ["libmagic-abi-v505"]
+default = ["libmagic-abi-v510"]
 libmagic-abi-v504 = []
 libmagic-abi-v505 = ["libmagic-abi-v504"]
+libmagic-abi-v510 = ["libmagic-abi-v505"]
 
 [dependencies]
 libc = "0.2.13"
