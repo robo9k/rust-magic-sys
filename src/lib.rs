@@ -167,3 +167,148 @@ extern "C" {
     #[must_use]
     pub fn magic_getparam(cookie: *const Magic, param: c_int, value: *mut c_void) -> c_int;
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // Those tests are mostly just sanity checks to see if linkage works,
+    // they are NOT testing `libmagic` API/implementation
+
+    #[test]
+    fn test_magic_open() {
+        unsafe {
+            magic_open(MAGIC_NONE);
+        }
+    }
+
+    #[test]
+    fn test_magic_close() {
+        unsafe {
+            magic_close(std::ptr::null());
+        }
+    }
+
+    #[cfg(feature = "libmagic-abi-v504")]
+    #[test]
+    fn test_magic_getpath() {
+        unsafe {
+            magic_getpath(std::ptr::null(), FILE_CHECK);
+        }
+    }
+
+    #[test]
+    fn test_magic_file() {
+        unsafe {
+            magic_file(std::ptr::null(), std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_magic_descriptor() {
+        unsafe {
+            magic_descriptor(std::ptr::null(), -1);
+        }
+    }
+
+    #[test]
+    fn test_magic_buffer() {
+        unsafe {
+            magic_buffer(std::ptr::null(), std::ptr::null(), 0);
+        }
+    }
+
+    #[test]
+    fn test_magic_error() {
+        unsafe {
+            magic_error(std::ptr::null());
+        }
+    }
+
+    #[cfg(feature = "libmagic-abi-v532")]
+    #[test]
+    fn test_magic_getflags() {
+        unsafe {
+            magic_getflags(std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_magic_setflags() {
+        unsafe {
+            let _ = magic_setflags(std::ptr::null(), MAGIC_NONE);
+        }
+    }
+
+    #[cfg(feature = "libmagic-abi-v513")]
+    #[test]
+    fn test_magic_version() {
+        unsafe {
+            magic_version();
+        }
+    }
+
+    #[test]
+    fn test_magic_load() {
+        unsafe {
+            let _ = magic_load(std::ptr::null(), std::ptr::null());
+        }
+    }
+
+    #[cfg(feature = "libmagic-abi-v520")]
+    #[test]
+    fn test_magic_load_buffers() {
+        unsafe {
+            let _ = magic_load_buffers(std::ptr::null(), std::ptr::null(), std::ptr::null(), 0);
+        }
+    }
+
+    #[test]
+    fn test_magic_compile() {
+        unsafe {
+            let _ = magic_compile(std::ptr::null(), std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_magic_check() {
+        unsafe {
+            let _ = magic_check(std::ptr::null(), std::ptr::null());
+        }
+    }
+
+    #[cfg(feature = "libmagic-abi-v505")]
+    #[test]
+    fn test_magic_list() {
+        unsafe {
+            let _ = magic_list(std::ptr::null(), std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_magic_errno() {
+        unsafe {
+            magic_errno(std::ptr::null());
+        }
+    }
+
+    #[cfg(feature = "libmagic-abi-v521")]
+    #[test]
+    fn test_magic_setparam() {
+        unsafe {
+            let _ = magic_setparam(std::ptr::null(), MAGIC_PARAM_INDIR_MAX, std::ptr::null());
+        }
+    }
+
+    #[cfg(feature = "libmagic-abi-v521")]
+    #[test]
+    fn test_magic_getparam() {
+        unsafe {
+            let _ = magic_getparam(
+                std::ptr::null(),
+                MAGIC_PARAM_INDIR_MAX,
+                std::ptr::null_mut(),
+            );
+        }
+    }
+}
