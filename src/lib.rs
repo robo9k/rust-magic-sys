@@ -56,6 +56,8 @@ pub const MAGIC_NO_CHECK_FORTRAN: c_int = 0x000000;
 #[deprecated]
 pub const MAGIC_NO_CHECK_TROFF: c_int = 0x000000;
 
+// TODO: MAGIC_VERSION string
+
 // NOTE: the following are from `file.h`, but part of `magic.h` API
 #[cfg(feature = "libmagic-abi-v504")]
 pub const FILE_LOAD: c_int = 0;
@@ -80,6 +82,8 @@ extern "C" {
     #[must_use]
     pub fn magic_setflags(cookie: *const Magic, flags: c_int) -> c_int;
 
+    #[cfg(feature = "libmagic-abi-v513")]
+    pub fn magic_version() -> c_int;
     #[must_use]
     pub fn magic_load(cookie: *const Magic, filename: *const c_char) -> c_int;
     #[must_use]
