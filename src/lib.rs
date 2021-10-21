@@ -38,6 +38,8 @@ pub const MAGIC_NO_CHECK_APPTYPE: c_int = 0x0008000;
 pub const MAGIC_NO_CHECK_ELF: c_int = 0x0010000;
 pub const MAGIC_NO_CHECK_TEXT: c_int = 0x0020000;
 pub const MAGIC_NO_CHECK_CDF: c_int = 0x0040000;
+#[cfg(feature = "libmagic-abi-v538")]
+pub const MAGIC_NO_CHECK_CSV: c_int = 0x0080000;
 pub const MAGIC_NO_CHECK_TOKENS: c_int = 0x0100000;
 pub const MAGIC_NO_CHECK_ENCODING: c_int = 0x0200000;
 #[cfg(feature = "libmagic-abi-v535")]
@@ -55,13 +57,26 @@ MAGIC_NO_CHECK_TEXT     |
 MAGIC_NO_CHECK_CDF      |
 MAGIC_NO_CHECK_TOKENS   |
 MAGIC_NO_CHECK_ENCODING;
-#[cfg(feature = "libmagic-abi-v535")]
+#[cfg(all(feature = "libmagic-abi-v535", not(feature = "libmagic-abi-v538")))]
 pub const MAGIC_NO_CHECK_BUILTIN: c_int = MAGIC_NO_CHECK_COMPRESS |
 MAGIC_NO_CHECK_TAR      |
 /* MAGIC_NO_CHECK_SOFT | */
 MAGIC_NO_CHECK_APPTYPE  |
 MAGIC_NO_CHECK_ELF      |
 MAGIC_NO_CHECK_TEXT     |
+MAGIC_NO_CHECK_CDF      |
+MAGIC_NO_CHECK_TOKENS   |
+MAGIC_NO_CHECK_ENCODING |
+MAGIC_NO_CHECK_JSON |
+0;
+#[cfg(feature = "libmagic-abi-v538")]
+pub const MAGIC_NO_CHECK_BUILTIN: c_int = MAGIC_NO_CHECK_COMPRESS |
+MAGIC_NO_CHECK_TAR      |
+/* MAGIC_NO_CHECK_SOFT | */
+MAGIC_NO_CHECK_APPTYPE  |
+MAGIC_NO_CHECK_ELF      |
+MAGIC_NO_CHECK_TEXT     |
+MAGIC_NO_CHECK_CSV |
 MAGIC_NO_CHECK_CDF      |
 MAGIC_NO_CHECK_TOKENS   |
 MAGIC_NO_CHECK_ENCODING |

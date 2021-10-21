@@ -25,7 +25,7 @@ exclude = [
 rust-version = "1.38"
 
 [features]
-default = ["libmagic-abi-v535"]
+default = ["libmagic-abi-v538"]
 libmagic-abi-v504 = []
 libmagic-abi-v505 = ["libmagic-abi-v504"]
 libmagic-abi-v510 = ["libmagic-abi-v505"]
@@ -38,6 +38,7 @@ libmagic-abi-v525 = ["libmagic-abi-v523"]
 libmagic-abi-v527 = ["libmagic-abi-v525"]
 libmagic-abi-v532 = ["libmagic-abi-v527"]
 libmagic-abi-v535 = ["libmagic-abi-v532"]
+libmagic-abi-v538 = ["libmagic-abi-v535"]
 
 [dependencies]
 libc = "0.2.13"
