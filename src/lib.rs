@@ -64,6 +64,8 @@ pub const MAGIC_NO_CHECK_TROFF: c_int = 0x000000;
 
 // TODO: MAGIC_VERSION string
 
+// TODO: MAGIC_SNPRINTB bytes
+
 #[cfg(feature = "libmagic-abi-v521")]
 pub const MAGIC_PARAM_INDIR_MAX: c_int = 0;
 #[cfg(feature = "libmagic-abi-v521")]
@@ -100,6 +102,8 @@ extern "C" {
     pub fn magic_buffer(cookie: *const Magic, buffer: *const u8, length: size_t) -> *const c_char;
 
     pub fn magic_error(cookie: *const Magic) -> *const c_char;
+    #[cfg(feature = "libmagic-abi-v532")]
+    pub fn magic_getflags(cookie: *const Magic) -> c_int;
     #[must_use]
     pub fn magic_setflags(cookie: *const Magic, flags: c_int) -> c_int;
 
