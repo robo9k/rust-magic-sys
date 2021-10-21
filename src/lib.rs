@@ -74,6 +74,8 @@ pub const MAGIC_PARAM_ELF_PHNUM_MAX: c_int = 2;
 pub const MAGIC_PARAM_ELF_SHNUM_MAX: c_int = 3;
 #[cfg(feature = "libmagic-abi-v522")]
 pub const MAGIC_PARAM_ELF_NOTES_MAX: c_int = 4;
+#[cfg(feature = "libmagic-abi-v525")]
+pub const MAGIC_PARAM_REGEX_MAX: c_int = 5;
 
 // NOTE: the following are from `file.h`, but part of `magic.h` API
 #[cfg(feature = "libmagic-abi-v504")]
