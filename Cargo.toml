@@ -15,7 +15,12 @@ links = "magic"
 build = "build.rs"
 exclude = [
     ".gitignore",
+    ".gitattributes",
     "/.github/",
+    "/.vscode/",
+    "rust-toolchain.toml",
+    "shell.nix",
+    "nix/",
 ]
 rust-version = "1.38"
 
