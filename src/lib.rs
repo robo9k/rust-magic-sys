@@ -1,5 +1,7 @@
 extern crate libc;
-use libc::{c_char, c_int, c_void, size_t};
+#[cfg(feature = "libmagic-abi-v520")]
+use libc::c_void;
+use libc::{c_char, c_int, size_t};
 
 // `libmagic` API as in "magic.h"
 
