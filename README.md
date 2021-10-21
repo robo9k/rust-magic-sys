@@ -46,6 +46,12 @@ cargo vcpkg build
 ```
 Afterwards, you can `cargo build` etc. your crate as usual.
 
+# MSRV
+
+The Minimum Supported Rust Version (MSRV) is Rust 1.38 or higher.
+
+This version might be changed in the future, but it will be done with a crate version bump.
+
 # Building
 
 By default `libmagic` will be searched in the system library paths. If you need to use a different library or are cross-compiling, you can set the `MAGIC_DIR` and `MAGIC_STATIC` environment variables.
