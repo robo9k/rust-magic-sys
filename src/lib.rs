@@ -10,47 +10,47 @@ pub struct Magic {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub const MAGIC_NONE: c_int = 0x0000000;
-pub const MAGIC_DEBUG: c_int = 0x0000001;
-pub const MAGIC_SYMLINK: c_int = 0x0000002;
-pub const MAGIC_COMPRESS: c_int = 0x0000004;
-pub const MAGIC_DEVICES: c_int = 0x0000008;
-pub const MAGIC_MIME_TYPE: c_int = 0x0000010;
-pub const MAGIC_CONTINUE: c_int = 0x0000020;
-pub const MAGIC_CHECK: c_int = 0x0000040;
-pub const MAGIC_PRESERVE_ATIME: c_int = 0x0000080;
-pub const MAGIC_RAW: c_int = 0x0000100;
-pub const MAGIC_ERROR: c_int = 0x0000200;
-pub const MAGIC_MIME_ENCODING: c_int = 0x0000400;
+pub const MAGIC_NONE: c_int = 0x000_0000;
+pub const MAGIC_DEBUG: c_int = 0x000_0001;
+pub const MAGIC_SYMLINK: c_int = 0x000_0002;
+pub const MAGIC_COMPRESS: c_int = 0x000_0004;
+pub const MAGIC_DEVICES: c_int = 0x000_0008;
+pub const MAGIC_MIME_TYPE: c_int = 0x000_0010;
+pub const MAGIC_CONTINUE: c_int = 0x000_0020;
+pub const MAGIC_CHECK: c_int = 0x000_0040;
+pub const MAGIC_PRESERVE_ATIME: c_int = 0x000_0080;
+pub const MAGIC_RAW: c_int = 0x000_0100;
+pub const MAGIC_ERROR: c_int = 0x000_0200;
+pub const MAGIC_MIME_ENCODING: c_int = 0x000_0400;
 pub const MAGIC_MIME: c_int = (MAGIC_MIME_TYPE | MAGIC_MIME_ENCODING);
-pub const MAGIC_APPLE: c_int = 0x000800;
+pub const MAGIC_APPLE: c_int = 0x00_0800;
 #[cfg(feature = "libmagic-abi-v523")]
-pub const MAGIC_EXTENSION: c_int = 0x1000000;
+pub const MAGIC_EXTENSION: c_int = 0x100_0000;
 #[cfg(feature = "libmagic-abi-v523")]
-pub const MAGIC_COMPRESS_TRANSP: c_int = 0x2000000;
+pub const MAGIC_COMPRESS_TRANSP: c_int = 0x200_0000;
 #[cfg(feature = "libmagic-abi-v523")]
 pub const MAGIC_NODESC: c_int = (MAGIC_EXTENSION | MAGIC_MIME | MAGIC_APPLE);
 
-pub const MAGIC_NO_CHECK_COMPRESS: c_int = 0x0001000;
-pub const MAGIC_NO_CHECK_TAR: c_int = 0x0002000;
-pub const MAGIC_NO_CHECK_SOFT: c_int = 0x0004000;
-pub const MAGIC_NO_CHECK_APPTYPE: c_int = 0x0008000;
-pub const MAGIC_NO_CHECK_ELF: c_int = 0x0010000;
-pub const MAGIC_NO_CHECK_TEXT: c_int = 0x0020000;
-pub const MAGIC_NO_CHECK_CDF: c_int = 0x0040000;
+pub const MAGIC_NO_CHECK_COMPRESS: c_int = 0x000_1000;
+pub const MAGIC_NO_CHECK_TAR: c_int = 0x000_2000;
+pub const MAGIC_NO_CHECK_SOFT: c_int = 0x000_4000;
+pub const MAGIC_NO_CHECK_APPTYPE: c_int = 0x000_8000;
+pub const MAGIC_NO_CHECK_ELF: c_int = 0x001_0000;
+pub const MAGIC_NO_CHECK_TEXT: c_int = 0x002_0000;
+pub const MAGIC_NO_CHECK_CDF: c_int = 0x004_0000;
 #[cfg(feature = "libmagic-abi-v538")]
-pub const MAGIC_NO_CHECK_CSV: c_int = 0x0080000;
-pub const MAGIC_NO_CHECK_TOKENS: c_int = 0x0100000;
-pub const MAGIC_NO_CHECK_ENCODING: c_int = 0x0200000;
+pub const MAGIC_NO_CHECK_CSV: c_int = 0x008_0000;
+pub const MAGIC_NO_CHECK_TOKENS: c_int = 0x010_0000;
+pub const MAGIC_NO_CHECK_ENCODING: c_int = 0x020_0000;
 #[cfg(feature = "libmagic-abi-v535")]
-pub const MAGIC_NO_CHECK_JSON: c_int = 0x0400000;
+pub const MAGIC_NO_CHECK_JSON: c_int = 0x040_0000;
 
 #[cfg(all(feature = "libmagic-abi-v505", not(feature = "libmagic-abi-v510")))]
-pub const MAGIC_NO_CHECK_BUILTIN: c_int = 0x3fb000;
+pub const MAGIC_NO_CHECK_BUILTIN: c_int = 0x3f_b000;
 #[cfg(all(feature = "libmagic-abi-v510", not(feature = "libmagic-abi-v535")))]
 pub const MAGIC_NO_CHECK_BUILTIN: c_int = MAGIC_NO_CHECK_COMPRESS |
 MAGIC_NO_CHECK_TAR      |
-/* MAGIC_NO_CHECK_SOFT | */
+// MAGIC_NO_CHECK_SOFT  |
 MAGIC_NO_CHECK_APPTYPE  |
 MAGIC_NO_CHECK_ELF      |
 MAGIC_NO_CHECK_TEXT     |
@@ -60,36 +60,34 @@ MAGIC_NO_CHECK_ENCODING;
 #[cfg(all(feature = "libmagic-abi-v535", not(feature = "libmagic-abi-v538")))]
 pub const MAGIC_NO_CHECK_BUILTIN: c_int = MAGIC_NO_CHECK_COMPRESS |
 MAGIC_NO_CHECK_TAR      |
-/* MAGIC_NO_CHECK_SOFT | */
+// MAGIC_NO_CHECK_SOFT  |
 MAGIC_NO_CHECK_APPTYPE  |
 MAGIC_NO_CHECK_ELF      |
 MAGIC_NO_CHECK_TEXT     |
 MAGIC_NO_CHECK_CDF      |
 MAGIC_NO_CHECK_TOKENS   |
 MAGIC_NO_CHECK_ENCODING |
-MAGIC_NO_CHECK_JSON |
-0;
+MAGIC_NO_CHECK_JSON;
 #[cfg(feature = "libmagic-abi-v538")]
 pub const MAGIC_NO_CHECK_BUILTIN: c_int = MAGIC_NO_CHECK_COMPRESS |
 MAGIC_NO_CHECK_TAR      |
-/* MAGIC_NO_CHECK_SOFT | */
+// MAGIC_NO_CHECK_SOFT  |
 MAGIC_NO_CHECK_APPTYPE  |
 MAGIC_NO_CHECK_ELF      |
 MAGIC_NO_CHECK_TEXT     |
-MAGIC_NO_CHECK_CSV |
+MAGIC_NO_CHECK_CSV      |
 MAGIC_NO_CHECK_CDF      |
 MAGIC_NO_CHECK_TOKENS   |
 MAGIC_NO_CHECK_ENCODING |
-MAGIC_NO_CHECK_JSON |
-0;
+MAGIC_NO_CHECK_JSON;
 
 #[deprecated]
 pub const MAGIC_NO_CHECK_ASCII: c_int = MAGIC_NO_CHECK_TEXT;
 
 #[deprecated]
-pub const MAGIC_NO_CHECK_FORTRAN: c_int = 0x000000;
+pub const MAGIC_NO_CHECK_FORTRAN: c_int = 0x00_0000;
 #[deprecated]
-pub const MAGIC_NO_CHECK_TROFF: c_int = 0x000000;
+pub const MAGIC_NO_CHECK_TROFF: c_int = 0x00_0000;
 
 // TODO: MAGIC_VERSION string
 
