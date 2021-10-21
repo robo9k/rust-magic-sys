@@ -58,6 +58,15 @@ pub const MAGIC_NO_CHECK_TROFF: c_int = 0x000000;
 
 // TODO: MAGIC_VERSION string
 
+#[cfg(feature = "libmagic-abi-v521")]
+pub const MAGIC_PARAM_INDIR_MAX: c_int = 0;
+#[cfg(feature = "libmagic-abi-v521")]
+pub const MAGIC_PARAM_NAME_MAX: c_int = 1;
+#[cfg(feature = "libmagic-abi-v521")]
+pub const MAGIC_PARAM_ELF_PHNUM_MAX: c_int = 2;
+#[cfg(feature = "libmagic-abi-v521")]
+pub const MAGIC_PARAM_ELF_SHNUM_MAX: c_int = 3;
+
 // NOTE: the following are from `file.h`, but part of `magic.h` API
 #[cfg(feature = "libmagic-abi-v504")]
 pub const FILE_LOAD: c_int = 0;
@@ -103,4 +112,11 @@ extern "C" {
     #[must_use]
     pub fn magic_list(cookie: *const Magic, filename: *const c_char) -> c_int;
     pub fn magic_errno(cookie: *const Magic) -> *const c_int;
+
+    #[cfg(feature = "libmagic-abi-v521")]
+    #[must_use]
+    pub fn magic_setparam(cookie: *const Magic, param: c_int, value: *const c_void) -> c_int;
+    #[cfg(feature = "libmagic-abi-v521")]
+    #[must_use]
+    pub fn magic_getparam(cookie: *const Magic, param: c_int, value: *mut c_void) -> c_int;
 }
