@@ -1,6 +1,8 @@
 extern crate libc;
 use libc::{c_char, c_int, size_t};
 
+// `libmagic` API as in "magic.h"
+
 // https://doc.rust-lang.org/nomicon/ffi.html#representing-opaque-structs
 #[repr(C)]
 pub struct Magic {
@@ -40,10 +42,20 @@ pub const MAGIC_NO_CHECK_FORTRAN: c_int = 0x000000;
 #[deprecated]
 pub const MAGIC_NO_CHECK_TROFF: c_int = 0x000000;
 
+// NOTE: the following are from `file.h`, but part of `magic.h` API
+#[cfg(feature = "libmagic-abi-v504")]
+pub const FILE_LOAD: c_int = 0;
+#[cfg(feature = "libmagic-abi-v504")]
+pub const FILE_CHECK: c_int = 1;
+#[cfg(feature = "libmagic-abi-v504")]
+pub const FILE_COMPILE: c_int = 2;
+
 extern "C" {
     pub fn magic_open(flags: c_int) -> *const Magic;
     pub fn magic_close(cookie: *const Magic);
 
+    #[cfg(feature = "libmagic-abi-v504")]
+    pub fn magic_getpath(magicfile: *const c_char, action: c_int) -> *const c_char;
     pub fn magic_file(cookie: *const Magic, filename: *const c_char) -> *const c_char;
     pub fn magic_descriptor(cookie: *const Magic, fd: c_int) -> *const c_char;
     pub fn magic_buffer(cookie: *const Magic, buffer: *const u8, length: size_t) -> *const c_char;
