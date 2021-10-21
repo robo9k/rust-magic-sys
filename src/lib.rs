@@ -24,6 +24,7 @@ pub const MAGIC_ERROR: c_int = 0x000200;
 pub const MAGIC_MIME_ENCODING: c_int = 0x000400;
 pub const MAGIC_MIME: c_int = (MAGIC_MIME_TYPE | MAGIC_MIME_ENCODING);
 pub const MAGIC_APPLE: c_int = 0x000800;
+
 pub const MAGIC_NO_CHECK_COMPRESS: c_int = 0x001000;
 pub const MAGIC_NO_CHECK_TAR: c_int = 0x002000;
 pub const MAGIC_NO_CHECK_SOFT: c_int = 0x004000;
@@ -33,6 +34,9 @@ pub const MAGIC_NO_CHECK_TEXT: c_int = 0x020000;
 pub const MAGIC_NO_CHECK_CDF: c_int = 0x040000;
 pub const MAGIC_NO_CHECK_TOKENS: c_int = 0x100000;
 pub const MAGIC_NO_CHECK_ENCODING: c_int = 0x200000;
+
+#[cfg(feature = "libmagic-abi-v505")]
+pub const MAGIC_NO_CHECK_BUILTIN: c_int = 0x3fb000;
 
 #[deprecated]
 pub const MAGIC_NO_CHECK_ASCII: c_int = MAGIC_NO_CHECK_TEXT;
@@ -49,6 +53,8 @@ pub const FILE_LOAD: c_int = 0;
 pub const FILE_CHECK: c_int = 1;
 #[cfg(feature = "libmagic-abi-v504")]
 pub const FILE_COMPILE: c_int = 2;
+#[cfg(feature = "libmagic-abi-v505")]
+pub const FILE_LIST: c_int = 3;
 
 extern "C" {
     pub fn magic_open(flags: c_int) -> *const Magic;
@@ -70,5 +76,8 @@ extern "C" {
     pub fn magic_compile(cookie: *const Magic, filename: *const c_char) -> c_int;
     #[must_use]
     pub fn magic_check(cookie: *const Magic, filename: *const c_char) -> c_int;
+    #[cfg(feature = "libmagic-abi-v505")]
+    #[must_use]
+    pub fn magic_list(cookie: *const Magic, filename: *const c_char) -> c_int;
     pub fn magic_errno(cookie: *const Magic) -> *const c_int;
 }
