@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "rust-lang.rust",
+        "arrterian.nix-env-selector",
+        "jnoortheen.nix-ide"
+    ]
+}
