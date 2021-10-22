@@ -25,7 +25,7 @@ exclude = [
 rust-version = "1.38"
 
 [features]
-default = ["v5-40"]
+default = ["v5-38"]
 v5-04 = []
 v5-05 = ["v5-04"]
 v5-10 = ["v5-05"]
