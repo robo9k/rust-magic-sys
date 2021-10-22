@@ -3,8 +3,16 @@ name: cargo deny
 on:
   push:
     branches: [ main ]
+    paths: 
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+      - '.github/workflows/deny.yml'
   pull_request:
     branches: [ main ]
+    paths: 
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+      - '.github/workflows/deny.yml'
 
 env:
   CARGO_TERM_COLOR: always
