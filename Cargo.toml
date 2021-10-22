@@ -23,6 +23,7 @@ exclude = [
     "rust-toolchain.toml",
     "shell.nix",
     "nix/",
+    "deny.toml",
 ]
 rust-version = "1.38"
 
