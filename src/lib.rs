@@ -24,14 +24,14 @@ pub const MAGIC_PRESERVE_ATIME: c_int = 0x000_0080;
 pub const MAGIC_RAW: c_int = 0x000_0100;
 pub const MAGIC_ERROR: c_int = 0x000_0200;
 pub const MAGIC_MIME_ENCODING: c_int = 0x000_0400;
-pub const MAGIC_MIME: c_int = (MAGIC_MIME_TYPE | MAGIC_MIME_ENCODING);
+pub const MAGIC_MIME: c_int = MAGIC_MIME_TYPE | MAGIC_MIME_ENCODING;
 pub const MAGIC_APPLE: c_int = 0x00_0800;
 #[cfg(feature = "libmagic-abi-v523")]
 pub const MAGIC_EXTENSION: c_int = 0x100_0000;
 #[cfg(feature = "libmagic-abi-v523")]
 pub const MAGIC_COMPRESS_TRANSP: c_int = 0x200_0000;
 #[cfg(feature = "libmagic-abi-v523")]
-pub const MAGIC_NODESC: c_int = (MAGIC_EXTENSION | MAGIC_MIME | MAGIC_APPLE);
+pub const MAGIC_NODESC: c_int = MAGIC_EXTENSION | MAGIC_MIME | MAGIC_APPLE;
 
 pub const MAGIC_NO_CHECK_COMPRESS: c_int = 0x000_1000;
 pub const MAGIC_NO_CHECK_TAR: c_int = 0x000_2000;
