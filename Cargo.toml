@@ -47,8 +47,9 @@ v5-35 = ["v5-32"]
 v5-38 = ["v5-35"]
 v5-40 = ["v5-38"]
 
-[dependencies]
-libc = "0.2.13"
+[dependencies.libc]
+version = "0.2.104"
+default-features = false
 
 [build-dependencies]
 vcpkg = "0.2.15"
