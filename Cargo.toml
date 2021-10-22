@@ -1,18 +1,20 @@
 [package]
-
 name = "magic-sys"
-description = "Declarations for `libmagic`"
-readme = "README.md"
+description = "Declarations for the `libmagic` C library"
 keywords = [
     "magic",
     "file",
+    "ffi",
+    "bindings",
+]
+categories = [
+    "external-ffi-bindings",
 ]
 repository = "https://github.com/robo9k/rust-magic-sys.git"
 license = "MIT/Apache-2.0"
-version = "0.2.1"
-authors = ["robo9k <robo@9k.lv>"]
+version = "0.3.0-alpha.1"
+authors = ["robo9k <robo9k@symlink.io>"]
 links = "magic"
-build = "build.rs"
 exclude = [
     ".gitignore",
     ".gitattributes",
@@ -21,8 +23,12 @@ exclude = [
     "rust-toolchain.toml",
     "shell.nix",
     "nix/",
+    "deny.toml",
 ]
 rust-version = "1.38"
+
+[badges]
+maintenance = { status = "passively-maintained" }
 
 [features]
 default = ["v5-38"]
@@ -41,9 +47,6 @@ v5-35 = ["v5-32"]
 v5-38 = ["v5-35"]
 v5-40 = ["v5-38"]
 
-[dependencies]
-libc = "0.2.13"
-
 [build-dependencies]
 vcpkg = "0.2.15"
 
@@ -52,8 +55,12 @@ git = "https://github.com/microsoft/vcpkg"
 rev = "078f3e5"
 dependencies = ["libmagic"]
 
+[dependencies.libc]
+version = "0.2.104"
+default-features = false
+
 [package.metadata.vcpkg.target]
-x86_64-pc-windows-msvc = { triplet="x64-windows-static-md" }
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
 
 [package.metadata]
 msrv = "1.38.0"

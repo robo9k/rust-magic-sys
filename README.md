@@ -1,11 +1,11 @@
 rust-magic-sys [![linux build status](https://github.com/robo9k/rust-magic-sys/actions/workflows/linux.yml/badge.svg)](https://github.com/robo9k/rust-magic-sys/actions/workflows/linux.yml) [![windows build status](https://github.com/robo9k/rust-magic-sys/actions/workflows/windows.yml/badge.svg)](https://github.com/robo9k/rust-magic-sys/actions/workflows/windows.yml) [![mac build status](https://github.com/robo9k/rust-magic-sys/actions/workflows/mac.yml/badge.svg)](https://github.com/robo9k/rust-magic-sys/actions/workflows/mac.yml)
 ==============
 
-[Rust](http://www.rust-lang.org/) declarations for [libmagic](http://darwinsys.com/file/).
+[Rust](https://www.rust-lang.org/f) declarations for [libmagic](https://www.darwinsys.com/file/).
 
 ---
 
-This [cargo -sys package](http://doc.crates.io/build-script.html#*-sys-packages) provides `libmagic` declarations for e.g. the [`magic` binding](https://github.com/robo9k/rust-magic).
+This [cargo -sys package](https://doc.rust-lang.org/cargo/reference/build-scripts.html) provides `libmagic` declarations for e.g. the [`magic` binding](https://crates.io/crates/magic).
 
 
 # Usage
@@ -14,7 +14,7 @@ This [cargo -sys package](http://doc.crates.io/build-script.html#*-sys-packages)
 
 ```toml
 [dependencies]
-magic-sys = "0.2.0"
+magic-sys = "0.3"
 ```
 
 The `rustdoc` is available on [docs.rs](https://docs.rs/magic-sys).
@@ -28,7 +28,7 @@ Each API version has a crate feature like "v5-38" (v5.38 is also the default), s
 If you use a different version of `libmagic`, adjust your configuration:
 ```toml
 [dependencies.magic-sys]
-version = "0.2.1"
+version = "0.3"
 default-features = false
 features = ["v5-41"]
 ```
@@ -44,7 +44,7 @@ sudo apt-get install libmagic1 libmagic-dev
 On RHEL/Cent OS, Gentoo and others you will need to install the `file` package.
 
 
-On Mac OS X you can use [Homebrew](http://brew.sh/):
+On Mac OS X you can use [Homebrew](https://brew.sh/):
 ```sh
 brew install libmagic
 ```
@@ -87,8 +87,8 @@ If you do not use `cargo vcpkg build`, you will have to either
 # License
 
 Licensed under either of
- * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
- * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+ * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or https://www.apache.org/licenses/LICENSE-2.0)
+ * MIT license ([LICENSE-MIT](LICENSE-MIT) or https://opensource.org/licenses/MIT)
 
 at your option.
 
