@@ -49,8 +49,15 @@ fn main() {
     } else {
         if let Err(err) = vcpkg::find_package("libmagic") {
             println!("Could not find vcpkg package: {}", err);
+        } else if cfg!(windows) {
+            // workaround, see https://github.com/robo9k/rust-magic-sys/pull/16#issuecomment-949094327
+            println!("cargo:rustc-link-lib=shlwapi");
+
+            // vcpkg was successful, don't print anything else
+            return;
         }
 
+        // default fall through: try linking dynamically to just `libmagic` without further config
         println!("cargo:rustc-link-lib=dylib=magic");
     }
 }
