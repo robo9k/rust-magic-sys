@@ -14,7 +14,7 @@ This [cargo -sys package](https://doc.rust-lang.org/cargo/reference/build-script
 
 ```toml
 [dependencies]
-magic-sys = "0.2.0"
+magic-sys = "0.3"
 ```
 
 The `rustdoc` is available on [docs.rs](https://docs.rs/magic-sys).
@@ -28,7 +28,7 @@ Each API version has a crate feature like "v5-38" (v5.38 is also the default), s
 If you use a different version of `libmagic`, adjust your configuration:
 ```toml
 [dependencies.magic-sys]
-version = "0.2.1"
+version = "0.3"
 default-features = false
 features = ["v5-41"]
 ```
