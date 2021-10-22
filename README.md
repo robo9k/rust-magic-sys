@@ -21,6 +21,19 @@ The `rustdoc` is available on [docs.rs](https://docs.rs/magic-sys).
 
 # Requirements
 
+This crate requires the `libmagic` C library in version 5.
+
+You need to specify your `libmagic` version by activating the matching `magic-sys` feature.  
+Each API version has a crate feature like "v5-38" (v5.38 is also the default), see [Cargo.toml](Cargo.toml)  
+If you use a different version of `libmagic`, adjust your configuration:
+```toml
+[dependencies.magic-sys]
+version = "0.2.1"
+default-features = false
+features = ["v5-41"]
+```
+Note that those version features are additive, so "v5-41" implies "v5-40" and other previous versions.
+
 `libmagic` needs to be installed in a standard location (also see [issue #1](https://github.com/robo9k/rust-magic-sys/issues/1)).
 
 On a Debian based Linux system this can be achieved like this:
