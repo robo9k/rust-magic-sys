@@ -5,12 +5,16 @@ use libc::{c_char, c_int, size_t};
 
 // `libmagic` API as in "magic.h"
 
+#[allow(non_camel_case_types)]
 // https://doc.rust-lang.org/nomicon/ffi.html#representing-opaque-structs
 #[repr(C)]
-pub struct Magic {
+pub struct magic_set {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
+
+#[allow(non_camel_case_types)]
+pub type magic_t = *mut magic_set;
 
 pub const MAGIC_NONE: c_int = 0x000_0000;
 pub const MAGIC_DEBUG: c_int = 0x000_0001;
@@ -123,49 +127,49 @@ pub const FILE_COMPILE: c_int = 2;
 pub const FILE_LIST: c_int = 3;
 
 extern "C" {
-    pub fn magic_open(flags: c_int) -> *const Magic;
-    pub fn magic_close(cookie: *const Magic);
+    pub fn magic_open(flags: c_int) -> magic_t;
+    pub fn magic_close(cookie: magic_t);
 
     #[cfg(feature = "v5-04")]
     pub fn magic_getpath(magicfile: *const c_char, action: c_int) -> *const c_char;
-    pub fn magic_file(cookie: *const Magic, filename: *const c_char) -> *const c_char;
-    pub fn magic_descriptor(cookie: *const Magic, fd: c_int) -> *const c_char;
-    pub fn magic_buffer(cookie: *const Magic, buffer: *const u8, length: size_t) -> *const c_char;
+    pub fn magic_file(cookie: magic_t, filename: *const c_char) -> *const c_char;
+    pub fn magic_descriptor(cookie: magic_t, fd: c_int) -> *const c_char;
+    pub fn magic_buffer(cookie: magic_t, buffer: *const u8, length: size_t) -> *const c_char;
 
-    pub fn magic_error(cookie: *const Magic) -> *const c_char;
+    pub fn magic_error(cookie: magic_t) -> *const c_char;
     #[cfg(feature = "v5-32")]
-    pub fn magic_getflags(cookie: *const Magic) -> c_int;
+    pub fn magic_getflags(cookie: magic_t) -> c_int;
     #[must_use]
-    pub fn magic_setflags(cookie: *const Magic, flags: c_int) -> c_int;
+    pub fn magic_setflags(cookie: magic_t, flags: c_int) -> c_int;
 
     #[cfg(feature = "v5-13")]
     pub fn magic_version() -> c_int;
     #[must_use]
-    pub fn magic_load(cookie: *const Magic, filename: *const c_char) -> c_int;
+    pub fn magic_load(cookie: magic_t, filename: *const c_char) -> c_int;
     #[cfg(feature = "v5-20")]
     #[must_use]
     pub fn magic_load_buffers(
-        cookie: *const Magic,
-        buffers: *const *const c_void,
-        sizes: *const size_t,
+        cookie: magic_t,
+        buffers: *mut *mut c_void,
+        sizes: *mut size_t,
         nbuffers: size_t,
     ) -> c_int;
 
     #[must_use]
-    pub fn magic_compile(cookie: *const Magic, filename: *const c_char) -> c_int;
+    pub fn magic_compile(cookie: magic_t, filename: *const c_char) -> c_int;
     #[must_use]
-    pub fn magic_check(cookie: *const Magic, filename: *const c_char) -> c_int;
+    pub fn magic_check(cookie: magic_t, filename: *const c_char) -> c_int;
     #[cfg(feature = "v5-05")]
     #[must_use]
-    pub fn magic_list(cookie: *const Magic, filename: *const c_char) -> c_int;
-    pub fn magic_errno(cookie: *const Magic) -> *const c_int;
+    pub fn magic_list(cookie: magic_t, filename: *const c_char) -> c_int;
+    pub fn magic_errno(cookie: magic_t) -> *const c_int;
 
     #[cfg(feature = "v5-21")]
     #[must_use]
-    pub fn magic_setparam(cookie: *const Magic, param: c_int, value: *const c_void) -> c_int;
+    pub fn magic_setparam(cookie: magic_t, param: c_int, value: *const c_void) -> c_int;
     #[cfg(feature = "v5-21")]
     #[must_use]
-    pub fn magic_getparam(cookie: *const Magic, param: c_int, value: *mut c_void) -> c_int;
+    pub fn magic_getparam(cookie: magic_t, param: c_int, value: *mut c_void) -> c_int;
 }
 
 #[cfg(test)]
@@ -185,7 +189,7 @@ mod tests {
     #[test]
     fn test_magic_close() {
         unsafe {
-            magic_close(std::ptr::null());
+            magic_close(std::ptr::null_mut());
         }
     }
 
@@ -200,28 +204,28 @@ mod tests {
     #[test]
     fn test_magic_file() {
         unsafe {
-            magic_file(std::ptr::null(), std::ptr::null());
+            magic_file(std::ptr::null_mut(), std::ptr::null());
         }
     }
 
     #[test]
     fn test_magic_descriptor() {
         unsafe {
-            magic_descriptor(std::ptr::null(), -1);
+            magic_descriptor(std::ptr::null_mut(), -1);
         }
     }
 
     #[test]
     fn test_magic_buffer() {
         unsafe {
-            magic_buffer(std::ptr::null(), std::ptr::null(), 0);
+            magic_buffer(std::ptr::null_mut(), std::ptr::null(), 0);
         }
     }
 
     #[test]
     fn test_magic_error() {
         unsafe {
-            magic_error(std::ptr::null());
+            magic_error(std::ptr::null_mut());
         }
     }
 
@@ -229,14 +233,14 @@ mod tests {
     #[test]
     fn test_magic_getflags() {
         unsafe {
-            magic_getflags(std::ptr::null());
+            magic_getflags(std::ptr::null_mut());
         }
     }
 
     #[test]
     fn test_magic_setflags() {
         unsafe {
-            let _ = magic_setflags(std::ptr::null(), MAGIC_NONE);
+            let _ = magic_setflags(std::ptr::null_mut(), MAGIC_NONE);
         }
     }
 
@@ -251,7 +255,7 @@ mod tests {
     #[test]
     fn test_magic_load() {
         unsafe {
-            let _ = magic_load(std::ptr::null(), std::ptr::null());
+            let _ = magic_load(std::ptr::null_mut(), std::ptr::null());
         }
     }
 
@@ -259,21 +263,26 @@ mod tests {
     #[test]
     fn test_magic_load_buffers() {
         unsafe {
-            let _ = magic_load_buffers(std::ptr::null(), std::ptr::null(), std::ptr::null(), 0);
+            let _ = magic_load_buffers(
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                0,
+            );
         }
     }
 
     #[test]
     fn test_magic_compile() {
         unsafe {
-            let _ = magic_compile(std::ptr::null(), std::ptr::null());
+            let _ = magic_compile(std::ptr::null_mut(), std::ptr::null());
         }
     }
 
     #[test]
     fn test_magic_check() {
         unsafe {
-            let _ = magic_check(std::ptr::null(), std::ptr::null());
+            let _ = magic_check(std::ptr::null_mut(), std::ptr::null());
         }
     }
 
@@ -281,14 +290,14 @@ mod tests {
     #[test]
     fn test_magic_list() {
         unsafe {
-            let _ = magic_list(std::ptr::null(), std::ptr::null());
+            let _ = magic_list(std::ptr::null_mut(), std::ptr::null());
         }
     }
 
     #[test]
     fn test_magic_errno() {
         unsafe {
-            magic_errno(std::ptr::null());
+            magic_errno(std::ptr::null_mut());
         }
     }
 
@@ -296,7 +305,11 @@ mod tests {
     #[test]
     fn test_magic_setparam() {
         unsafe {
-            let _ = magic_setparam(std::ptr::null(), MAGIC_PARAM_INDIR_MAX, std::ptr::null());
+            let _ = magic_setparam(
+                std::ptr::null_mut(),
+                MAGIC_PARAM_INDIR_MAX,
+                std::ptr::null(),
+            );
         }
     }
 
@@ -305,7 +318,7 @@ mod tests {
     fn test_magic_getparam() {
         unsafe {
             let _ = magic_getparam(
-                std::ptr::null(),
+                std::ptr::null_mut(),
                 MAGIC_PARAM_INDIR_MAX,
                 std::ptr::null_mut(),
             );
