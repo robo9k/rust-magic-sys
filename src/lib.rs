@@ -162,7 +162,7 @@ extern "C" {
     #[cfg(feature = "v5-05")]
     #[must_use]
     pub fn magic_list(cookie: magic_t, filename: *const c_char) -> c_int;
-    pub fn magic_errno(cookie: magic_t) -> *const c_int;
+    pub fn magic_errno(cookie: magic_t) -> c_int;
 
     #[cfg(feature = "v5-21")]
     #[must_use]
