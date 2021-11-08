@@ -1,3 +1,7 @@
+// Technically this crate doesn't need Rust `std`
+// but you'll still have to get the `libmagic` C library working for your target
+#![cfg_attr(not(test), no_std)]
+
 extern crate libc;
 #[cfg(feature = "v5-20")]
 use libc::c_void;
