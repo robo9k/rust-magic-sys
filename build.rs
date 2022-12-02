@@ -1,3 +1,5 @@
+use std::env::consts::{DLL_PREFIX, DLL_SUFFIX};
+
 fn env(name: &str) -> Option<std::ffi::OsString> {
     let target = std::env::var("TARGET").expect("Cargo didn't provide `TARGET` environment var");
     let target = target.to_uppercase().replace("-", "_");
@@ -23,7 +25,7 @@ fn main() {
         );
 
         let static_lib = magic_dir.join("libmagic.a");
-        let shared_lib = magic_dir.join("libmagic.so");
+        let shared_lib = magic_dir.join(format!("{}magic{}", DLL_PREFIX, DLL_SUFFIX));
         match env("MAGIC_STATIC").as_ref().and_then(|s| s.to_str()) {
             Some("false") | Some("FALSE") | Some("0") => {
                 if !shared_lib.exists() {
