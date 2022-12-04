@@ -26,7 +26,7 @@ exclude = [
     "nix/",
     "deny.toml",
 ]
-rust-version = "1.38"
+rust-version = "1.54"
 
 [badges]
 maintenance = { status = "passively-maintained" }
@@ -64,7 +64,7 @@ default-features = false
 x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
 
 [package.metadata]
-msrv = "1.38.0"
+msrv = "1.54.0"
 
 [package.metadata.docs.rs]
 all-features = true

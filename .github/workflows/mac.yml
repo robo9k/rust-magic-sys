@@ -20,6 +20,14 @@ jobs:
       run: |
         brew update
         brew install libmagic
+    - name: install Rust MSRV
+      uses: actions-rs/toolchain@b2417cde72dcf67f306c0ae8e0828a81bf0b189f # v1.0.6
+      with:
+        profile: minimal
+        # toolchain could be implicit from rust-toolchain.toml see https://github.com/actions-rs/toolchain#the-toolchain-file
+        # but this doesn't support .toml files
+        toolchain: "1.64.0"
+        override: true
     - name: Build
       run: cargo build --verbose
     - name: Run tests
