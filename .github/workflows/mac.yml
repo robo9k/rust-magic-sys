@@ -16,10 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: brew
-      run: |
-        brew update
-        brew install libmagic
+    - uses: ./.github/actions/setup-libmagic
     - name: install Rust MSRV
       uses: actions-rs/toolchain@b2417cde72dcf67f306c0ae8e0828a81bf0b189f # v1.0.6
       with:
