@@ -21,10 +21,41 @@ The `rustdoc` is available on [docs.rs](https://docs.rs/magic-sys).
 
 # Requirements
 
-This crate requires the `libmagic` C library in version 5.
+This crate requires the `libmagic` C library in version 5.39 or newer.
 
-You need to specify your `libmagic` version by activating the matching `magic-sys` feature.  
-Each API version has a crate feature like "v5-38" (v5.38 is also the default), see [Cargo.toml](Cargo.toml)  
+## libmagic
+
+If you don't want to configure the build, `libmagic` has to be available in a standard location
+for either `pkg-config` or `vcpkg`, see [Building](#Building).
+
+On a Debian based Linux system such as Ubuntu this can be achieved like this:
+```sh
+sudo apt-get install libmagic1 libmagic-dev
+```
+
+On RHEL/Cent OS, Gentoo and others you will need to install the `file` package.
+
+On Mac OS X you can use [Homebrew](https://brew.sh/):
+```sh
+brew install libmagic
+```
+
+Feedback for Windows ([issue #2](https://github.com/robo9k/rust-magic-sys/issues/2)) support is appreciated!
+
+You can use Microsoft's [`vcpkg`](https://vcpkg.io) via [`cargo-vcpkg`](https://crates.io/crates/cargo-vcpkg):
+```sh
+cargo install cargo-vcpkg
+cargo vcpkg build
+```
+Afterwards, you can `cargo build` etc. your crate as usual.
+
+## Version features
+
+The `libmagic` API is extended with new backwards-compatible features every now and then.\
+To use newly added `libmagic` functionality, you need to use a corresponding `libmagic` version.
+
+You need to specify your `libmagic` version by activating the matching `magic-sys` feature.\
+Each API version has a crate feature like "v5-38" (v5.38 is also the default), see [Cargo.toml](Cargo.toml)\
 If you use a different version of `libmagic`, adjust your configuration:
 ```toml
 [dependencies.magic-sys]
@@ -34,30 +65,7 @@ features = ["v5-41"]
 ```
 Note that those version features are additive, so "v5-41" implies "v5-40" and other previous versions.
 
-`libmagic` needs to be installed in a standard location (also see [issue #1](https://github.com/robo9k/rust-magic-sys/issues/1)).
-
-On a Debian based Linux system this can be achieved like this:
-```sh
-sudo apt-get install libmagic1 libmagic-dev
-```
-
-On RHEL/Cent OS, Gentoo and others you will need to install the `file` package.
-
-
-On Mac OS X you can use [Homebrew](https://brew.sh/):
-```sh
-brew install libmagic
-```
-
-Feedback for Windows ([issue #2](https://github.com/robo9k/rust-magic-sys/issues/2)) support is appreciated!
-
-You can use Microsoft's [`vcpkg`](https://vcpkg.io) via [`vcpkg-rs`](https://docs.rs/vcpkg) and [`cargo-vcpkg`](https://crates.io/crates/cargo-vcpkg).
-If you choose the latter, that means you'll have to:
-```sh
-cargo install cargo-vcpkg
-cargo vcpkg build
-```
-Afterwards, you can `cargo build` etc. your crate as usual.
+If you want to use a newer/different `libmagic` version, you will have to [link it](#Building) accordingly.
 
 # MSRV
 
@@ -67,22 +75,55 @@ This version might be changed in the future, but it will be done with a crate ve
 
 # Building
 
-By default `libmagic` will be searched in the system library paths. If you need to use a different library or are cross-compiling, you can set the `MAGIC_DIR` and `MAGIC_STATIC` environment variables.
+To determine which `libmagic` to link against, this crate uses
+[`pkg-config`](https://www.freedesktop.org/wiki/Software/pkg-config/)
+and [`vcpkg`](https://vcpkg.io/).
 
-## `MAGIC_DIR`, `<TARGET>_MAGIC_DIR`
-Tells `rustc` where to find `libmagic.so` / `libmagic.a`. Can have a target-specific prefix like `X86_64_UNKNOWN_LINUX_MUSL_MAGIC_DIR`
+In general you can link statically or dynamically against `libmagic`.
 
-## `MAGIC_STATIC`, `<TARGET>_MAGIC_STATIC`
-Controls static linking with `libmagic`. Enabled automatically if there's only a `libmagic.a` in the (provided) search path or if explicitly enabled like `MAGIC_STATIC=true`. Can have a target-specific prefix like `X86_64_UNKNOWN_LINUX_MUSL_MAGIC_STATIC`
+With static linkage your binary/library includes the `libmagic` code and _does not_ have a run-time dependency.
 
-Similarly `MAGIC_STATIC=false` can be used to choose to link `libmagic` dynamically.
-If unset but both libraries are available, the build will bail out with an error and you have to set one option explicitly.
+With dynamic linkage your binary/library _does not_ include the `libmagic` code and _does_ have a run-time dependency on a `libmagic.dll` / `libmagic.so` / `libmagic.dylib` depending on your platform (Windows / Linux / macOS).\
+You might have to ship this `libmagic` shared library with your binary/library if you do not expect your users to have a compatible version installed on their system.
+
+You might want to ship a copy of the default `libmagic` / `file` database with your binary/library if you do not expect your users to have a compatible `libmagic` installed on their system.
+
+## pkg-config
+
+This uses the [`pkg-config` crate](https://docs.rs/pkg-config), so check its documentation for details.
+
+You can use e.g. the following environment variables:
+- `LIBMAGIC_NO_PKG_CONFIG` if set, will skip `pkg-config`
+- `LIBMAGIC_STATIC` if set, instructs `pkg-config` to link statically
+- `LIBMAGIC_DYNAMIC` if set, instructs `pkg-config` to link dynamically
+
+By default dynamic linkage is used.
 
 ## vcpkg
-The optional `vcpkg` integration has its own set of environment variables, see [`vcpkg` crate docs](https://docs.rs/vcpkg/#environment-variables).
-If you do not use `cargo vcpkg build`, you will have to either
-* `vcpkg install libmagic` and set the environment variables for your `vcpkg` root directory
-* `vcpkg integrate install` your `vcpkg` root user-wide
+
+This uses the [`vcpkg` crate](https://docs.rs/vcpkg), so check its documentation for details.
+
+You can use e.g. the following environment variables:
+- `VCPKGRS_NO_LIBMAGIC` if set, will skip `vcpkg`
+- `VCPKGRS_DYNAMIC` if set, instructs `vcpkg` to link dynamically
+
+By default static linkage is used.
+
+You can use `vcpkg` standalone or by using [`cargo-vcpkg`](https://crates.io/crates/cargo-vcpkg).
+
+If you do _not_ use `cargo vcpkg build`, you will have to either
+- `vcpkg install libmagic` and set the `VCPKG_ROOT` environment variable for your `vcpkg` root directory
+- `vcpkg integrate install` your `vcpkg` root user-wide
+
+## Custom
+
+If you skip both `pkg-config` and `vcpkg` the `magic-sys` build script will fail.\
+Especially linking statically to `libmagic` requires additional libraries that depend on your version and system.
+
+You can skip the `magic-sys` build script entirely by [overriding it](https://doc.rust-lang.org/cargo/reference/build-scripts.html#overriding-build-scripts).\
+This is an option if you want to use neither `pkg-config` nor `vcpkg`.
+
+The `magic-sys` crate does not offer to link a against a bundled `libmagic` version.
 
 # License
 

@@ -1,63 +1,41 @@
-fn env(name: &str) -> Option<std::ffi::OsString> {
-    let target = std::env::var("TARGET").expect("Cargo didn't provide `TARGET` environment var");
-    let target = target.to_uppercase().replace("-", "_");
-    let prefixed_name = format!("{}_{}", target, name);
-    println!("cargo:rerun-if-env-changed={}", prefixed_name);
-    match std::env::var_os(prefixed_name) {
-        Some(v) => Some(v),
-        None => {
-            println!("cargo:rerun-if-env-changed={}", name);
-            std::env::var_os(name)
-        }
-    }
-}
+// SPDX-FileCopyrightText: © The `magic-sys` Rust crate authors
+// SPDX-License-Identifier: MIT OR Apache-2.0
 
 fn main() {
-    if let Some(magic_dir) = env("MAGIC_DIR").map(std::path::PathBuf::from) {
-        if !std::path::Path::new(&magic_dir).exists() {
-            panic!("Magic library directory {:?} does not exist", magic_dir);
-        }
-        println!(
-            "cargo:rustc-link-search=native={}",
-            magic_dir.to_string_lossy()
-        );
-
-        let static_lib = magic_dir.join("libmagic.a");
-        let shared_lib = magic_dir.join("libmagic.so");
-        match env("MAGIC_STATIC").as_ref().and_then(|s| s.to_str()) {
-            Some("false") | Some("FALSE") | Some("0") => {
-                if !shared_lib.exists() {
-                    panic!("No libmagic.so found in {:?}", magic_dir);
-                }
-                println!("cargo:rustc-link-lib=dylib=magic");
+    let lib = pkg_config::Config::new()
+        .atleast_version("5.39")
+        .probe("libmagic");
+    match lib {
+        Err(err) => match err {
+            pkg_config::Error::EnvNoPkgConfig(_) => {
+                println!("pkg-config skipped: {}", err);
             }
-            Some(_) => {
-                if !static_lib.exists() {
-                    panic!("No libmagic.a found in {:?}", magic_dir);
-                }
-                println!("cargo:rustc-link-lib=static=magic");
+            _ => {
+                println!("cargo:warning=pkg-config failed: {}", err);
             }
-            None => {
-                match (static_lib.exists(), shared_lib.exists()) {
-                    (false, false) => panic!("Neither libmagic.so, nor libmagic.a was found in {:?}", magic_dir),
-                    (true, false) => println!("cargo:rustc-link-lib=static=magic"),
-                    (false, true) => println!("cargo:rustc-link-lib=dylib=magic"),
-                    (true, true) => panic!("Both a static and a shared library were found in {:?}\nspecify a choice with `MAGIC_STATIC=true|false`", magic_dir),
-                }
-            }
-        }
-    } else {
-        if let Err(err) = vcpkg::find_package("libmagic") {
-            println!("Could not find vcpkg package: {}", err);
-        } else if cfg!(windows) {
-            // workaround, see https://github.com/robo9k/rust-magic-sys/pull/16#issuecomment-949094327
-            println!("cargo:rustc-link-lib=shlwapi");
-
-            // vcpkg was successful, don't print anything else
+        },
+        Ok(lib) => {
+            println!("pkg-config success: {:?}", lib);
             return;
         }
-
-        // default fall through: try linking dynamically to just `libmagic` without further config
-        println!("cargo:rustc-link-lib=dylib=magic");
     }
+
+    let lib = vcpkg::find_package("libmagic");
+    match lib {
+        Err(err) => match err {
+            vcpkg::Error::DisabledByEnv(_) => {
+                println!("vcpkg skipped: {}", err);
+            }
+            _ => {
+                println!("cargo:warning=vcpkg failed: {}", err);
+            }
+        },
+        Ok(lib) => {
+            println!("vcpkg success: {:?}", lib);
+            return;
+        }
+    }
+
+    // if we're reach here, this means that either both pkg-config and vcpkg got skipped or both failed
+    panic!("could not link to `libmagic` with neither `pkg-config` nor `vcpkg`");
 }

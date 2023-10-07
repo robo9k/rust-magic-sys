@@ -49,6 +49,7 @@ v5-38 = ["v5-35"]
 v5-40 = ["v5-38"]
 
 [build-dependencies]
+pkg-config = "0.3.27"
 vcpkg = "0.2.15"
 
 [package.metadata.vcpkg]
