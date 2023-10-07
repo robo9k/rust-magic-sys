@@ -30,7 +30,12 @@ fn try_vcpkg() -> LibraryResult<vcpkg::Error, vcpkg::Library> {
             vcpkg::Error::DisabledByEnv(_) => LibraryResult::Skipped(err),
             _ => LibraryResult::Failed(err),
         },
-        Ok(lib) => LibraryResult::Success(lib),
+        Ok(lib) => {
+            // workaround, see https://github.com/robo9k/rust-magic-sys/pull/16#issuecomment-949094327
+            println!("cargo:rustc-link-lib=shlwapi");
+
+            LibraryResult::Success(lib)
+        }
     }
 }
 
