@@ -16,10 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: vcpkg
-      run: |
-        cargo +stable install cargo-vcpkg
-        cargo vcpkg build
+    - uses: ./.github/actions/setup-libmagic
     - name: Build
       run: cargo build --verbose
     - name: Run tests
