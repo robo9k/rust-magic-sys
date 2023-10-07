@@ -1,3 +1,18 @@
+//! # Features
+//!
+//! This crate has the following [features](https://doc.rust-lang.org/cargo/reference/features.html#features):
+//!
+//! - `pkg-config`: Enables using [`pkg-config`](https://www.freedesktop.org/wiki/Software/pkg-config/)
+//! with the [`pkg-config` crate](https://docs.rs/pkg-config) in the build script\
+//! Check the [crate README](https://crates.io/crates/magic#pkg-config) for configuration details
+//! - `vcpkg`: Enables using [`vcpkg`](https://vcpkg.io/)
+//! with the [`vcpkg` crate](https://docs.rs/vcpkg) in the build script\
+//! Check the [crate README](https://crates.io/crates/magic#vcpkg) for configuration details
+//!
+//! The following features are enabled by default:
+//! - `pkg-config`
+//! - `vcpkg`
+
 // Technically this crate doesn't need Rust `std`
 // but you'll still have to get the `libmagic` C library working for your target
 #![cfg_attr(not(test), no_std)]

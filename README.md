@@ -79,6 +79,8 @@ To determine which `libmagic` to link against, this crate uses
 [`pkg-config`](https://www.freedesktop.org/wiki/Software/pkg-config/)
 and [`vcpkg`](https://vcpkg.io/).
 
+The crate does not offer to link a against a bundled `libmagic` version, see [issue #4](https://github.com/robo9k/rust-magic-sys/issues/4).
+
 In general you can link statically or dynamically against `libmagic`.
 
 With static linkage your binary/library includes the `libmagic` code and _does not_ have a run-time dependency.
@@ -90,7 +92,7 @@ You might want to ship a copy of the default `libmagic` / `file` database with y
 
 ## pkg-config
 
-This uses the [`pkg-config` crate](https://docs.rs/pkg-config), so check its documentation for details.
+The `pkg-config` crate feature uses the [`pkg-config` crate](https://docs.rs/pkg-config), so check its documentation for details.
 
 You can use e.g. the following environment variables:
 - `LIBMAGIC_NO_PKG_CONFIG` if set, will skip `pkg-config`
@@ -101,7 +103,7 @@ By default dynamic linkage is used.
 
 ## vcpkg
 
-This uses the [`vcpkg` crate](https://docs.rs/vcpkg), so check its documentation for details.
+The `vcpkg` crate feature uses the [`vcpkg` crate](https://docs.rs/vcpkg), so check its documentation for details.
 
 You can use e.g. the following environment variables:
 - `VCPKGRS_NO_LIBMAGIC` if set, will skip `vcpkg`
@@ -115,15 +117,13 @@ If you do _not_ use `cargo vcpkg build`, you will have to either
 - `vcpkg install libmagic` and set the `VCPKG_ROOT` environment variable for your `vcpkg` root directory
 - `vcpkg integrate install` your `vcpkg` root user-wide
 
-## Custom
+## Override
 
-If you skip both `pkg-config` and `vcpkg` the `magic-sys` build script will fail.\
+If you disable or skip both `pkg-config` and `vcpkg` the `magic-sys` build script will fail.\
 Especially linking statically to `libmagic` requires additional libraries that depend on your version and system.
 
 You can skip the `magic-sys` build script entirely by [overriding it](https://doc.rust-lang.org/cargo/reference/build-scripts.html#overriding-build-scripts).\
 This is an option if you want to use neither `pkg-config` nor `vcpkg`.
-
-The `magic-sys` crate does not offer to link a against a bundled `libmagic` version.
 
 # License
 
