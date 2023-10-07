@@ -32,7 +32,7 @@ rust-version = "1.54"
 maintenance = { status = "passively-maintained" }
 
 [features]
-default = ["v5-38"]
+default = ["v5-38", "pkg-config", "vcpkg"]
 v5-04 = []
 v5-05 = ["v5-04"]
 v5-10 = ["v5-05"]
@@ -49,8 +49,8 @@ v5-38 = ["v5-35"]
 v5-40 = ["v5-38"]
 
 [build-dependencies]
-pkg-config = "0.3.27"
-vcpkg = "0.2.15"
+pkg-config = { version = "0.3.27", optional = true }
+vcpkg = { version = "0.2.15", optional = true }
 
 [package.metadata.vcpkg]
 git = "https://github.com/microsoft/vcpkg"
