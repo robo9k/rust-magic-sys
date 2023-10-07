@@ -3,6 +3,9 @@ name: "build"
 permissions: {}
 
 on:
+  # run on default branch to store caches
+  push:
+    branches: [ main ]
   pull_request:
 
 jobs:
