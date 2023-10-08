@@ -1,17 +1,87 @@
 name: setup-libmagic
 description: Setup some version of `libmagic` for `magic-sys`
+inputs:
+  linkage:
+    description: 'How to link (against `libmagic`): "static" / "dynamic"'
+    default: static
 
 runs:
   using: 'composite'
   steps:
-    # setup cache
-    - name: setup cache
+    # check inputs
+    - name: check inputs
+      run: |
+        if [[ ! ("${{ inputs.linkage }}" == "static" || "${{ inputs.linkage }}" == "dynamic") ]]; then
+          echo "'linkage' input must be either 'static' or 'dynamic' but it is: ${{ inputs.linkage }}"
+          exit 1
+        fi
+      shell: bash
+
+
+    # setup environment
+
+    - name: setup environment
+      if: ${{ runner.os == 'Linux' }}
+      run: echo "VCPKGRS_NO_LIBMAGIC=1" >> "${GITHUB_ENV}"
+      shell: bash
+
+    - name: setup environment
+      if: ${{ runner.os == 'Windows' }}
+      run: echo "LIBMAGIC_NO_PKG_CONFIG=1" >> "${GITHUB_ENV}"
+      shell: bash
+
+    - name: setup environment
+      if: ${{ runner.os == 'macOS' }}
+      run: echo "VCPKGRS_NO_LIBMAGIC=1" >> "${GITHUB_ENV}"
+      shell: bash
+
+
+    # setup linkage
+
+    - name: setup linkage
+      if: ${{ runner.os == 'Linux' }}
+      run: |
+        if [[ "${{ inputs.linkage }}" == "static" ]]; then
+          echo "LIBMAGIC_STATIC=1" >> "${GITHUB_ENV}"
+        elif [[ "${{ inputs.linkage }}" == "dynamic" ]]; then
+          echo "LIBMAGIC_DYNAMIC=1" >> "${GITHUB_ENV}"
+        fi
+      shell: bash
+
+    - name: setup linkage
+      if: ${{ runner.os == 'Windows' }}
+      run: |
+        if [[ "${{ inputs.linkage }}" == "static" ]]; then
+          echo "VCPKG_DEFAULT_TRIPLET=x64-windows-static-md" >> "${GITHUB_ENV}"
+        elif [[ "${{ inputs.linkage }}" == "dynamic" ]]; then
+          echo "VCPKG_DEFAULT_TRIPLET=x64-windows" >> "${GITHUB_ENV}"
+          echo "VCPKGRS_DYNAMIC=1" >> "${GITHUB_ENV}"
+        fi
+      shell: bash
+
+    - name: setup linkage
+      if: ${{ runner.os == 'macOS' }}
+      run: |
+        if [[ "${{ inputs.linkage }}" == "static" ]]; then
+          echo "LIBMAGIC_STATIC=1" >> "${GITHUB_ENV}"
+        elif [[ "${{ inputs.linkage }}" == "dynamic" ]]; then
+          echo "LIBMAGIC_DYNAMIC=1" >> "${GITHUB_ENV}"
+        fi
+      shell: bash
+
+
+    # vcpkg cache
+    - name: expose cache
       if: ${{ runner.os == 'Windows' }}
       uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       with:
         script: |
           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+    - name: setup cache
+      if: ${{ runner.os == 'Windows' }}
+      run: echo "VCPKG_BINARY_SOURCES=clear;x-gha,readwrite" >> "${GITHUB_ENV}"
+      shell: bash
 
 
     # update packages
@@ -42,46 +112,11 @@ runs:
     - name: install packages
       if: ${{ runner.os == 'Windows' }}
       run: |
-        vcpkg install libmagic:x64-windows-static-md
+        vcpkg install libmagic
         echo "VCPKG_ROOT=${VCPKG_INSTALLATION_ROOT}" >> "${GITHUB_ENV}"
       shell: bash
 
     - name: install packages
       if: ${{ runner.os == 'macOS' }}
       run: brew install libmagic pkg-config
-      shell: bash
-
-
-    # setup environment
-
-    - name: setup environment
-      if: ${{ runner.os == 'Linux' }}
-      run: echo "VCPKGRS_NO_LIBMAGIC=1" >> "${GITHUB_ENV}"
-      shell: bash
-
-    - name: setup environment
-      if: ${{ runner.os == 'Windows' }}
-      run: echo "LIBMAGIC_NO_PKG_CONFIG=1" >> "${GITHUB_ENV}"
-      shell: bash
-
-    - name: setup environment
-      if: ${{ runner.os == 'macOS' }}
-      run: echo "VCPKGRS_NO_LIBMAGIC=1" >> "${GITHUB_ENV}"
-      shell: bash
-
-    # setup static build
-
-    - name: setup static build
-      if: ${{ runner.os == 'Linux' }}
-      run: echo "LIBMAGIC_STATIC=1" >> "${GITHUB_ENV}"
-      shell: bash
-
-    - name: setup static build
-      if: ${{ runner.os == 'Windows' }}
-      run: echo "Static builds are the default for vcpkg-rs"
-      shell: bash
-
-    - name: setup static build
-      if: ${{ runner.os == 'macOS' }}
-      run: echo "LIBMAGIC_STATIC=1" >> "${GITHUB_ENV}"
       shell: bash
