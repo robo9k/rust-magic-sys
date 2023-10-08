@@ -1,0 +1,73 @@
+name: "test-libmagic-version"
+
+permissions: {}
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  build:
+    name: "cargo test"
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        version:
+          - "5.39"
+          - "5.40"
+          - "5.41"
+          - "5.42"
+          - "5.43"
+          - "5.44"
+          - "5.45"
+
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install automake gcc libtool make python3 zlib1g-dev
+
+      - run: curl --output file-${{ matrix.version }}.tgz https://astron.com/pub/file/file-${{ matrix.version }}.tar.gz
+
+      - run: tar -xzf file-${{ matrix.version }}.tgz
+
+      - id: prefix
+        run: |
+          mkdir _prefix
+          echo "dir=$(readlink -f _prefix)" >> "${GITHUB_OUTPUT}"
+
+      - run: |
+          cd file-${{ matrix.version }}
+          autoreconf -f -i
+          ./configure --disable-silent-rules --prefix=${{ steps.prefix.outputs.dir }} --enable-static
+          make
+          make install
+
+      - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        with:
+          name: file-${{ matrix.version }}
+          path: |
+            ${{ steps.prefix.outputs.dir }}/include/
+            ${{ steps.prefix.outputs.dir }}/lib/pkgconfig/
+            ${{ steps.prefix.outputs.dir }}/share/misc/
+    
+      - run: echo "PKG_CONFIG_PATH=${{ steps.prefix.outputs.dir }}/lib/pkgconfig" >> "${GITHUB_ENV}"
+
+      - id: toolchain
+        uses: dtolnay/rust-toolchain@439cf607258077187679211f12aa6f19af4a0af7 # doesn't have usual versioned releases/tags
+        with:
+          toolchain: "1.54.0" # hardcoded crate MSRV, see rust-toolchain.toml etc.
+          # minimal profile includes rustc component which includes cargo and rustdoc
+
+      - uses: rui314/setup-mold@354d1662b2a6f02e5eccc9712f22657621bf645b # does not have recent tags
+
+      - uses: Swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43 # v2.7.0 
+
+      - run: cargo +${{ steps.toolchain.outputs.name }} test --all-targets --all-features --verbose
