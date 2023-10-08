@@ -1,0 +1,114 @@
+name: "build-extra"
+
+permissions: {}
+
+on:
+  # run on default branch to store caches
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-extra:
+    name: "cargo build [dynamic]"
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        runner: [ubuntu-22.04, windows-2022, macos-12]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - uses: ./.github/actions/setup-libmagic
+        with:
+          linkage: dynamic
+
+      - id: toolchain
+        uses: dtolnay/rust-toolchain@439cf607258077187679211f12aa6f19af4a0af7 # doesn't have usual versioned releases/tags
+        with:
+          toolchain: "1.54.0" # hardcoded crate MSRV, see rust-toolchain.toml etc.
+          # minimal profile includes rustc component which includes cargo and rustdoc
+
+      - uses: rui314/setup-mold@354d1662b2a6f02e5eccc9712f22657621bf645b # does not have recent tags
+
+      - uses: Swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43 # v2.7.0 
+
+      - run: cargo +${{ steps.toolchain.outputs.name }} build --all-targets --all-features --verbose
+
+  test-extra:
+    name: "cargo test [dynamic]"
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        runner: [ubuntu-22.04, windows-2022, macos-12]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - uses: ./.github/actions/setup-libmagic
+        with:
+          linkage: dynamic
+
+      - id: toolchain
+        uses: dtolnay/rust-toolchain@439cf607258077187679211f12aa6f19af4a0af7 # doesn't have usual versioned releases/tags
+        with:
+          toolchain: "1.54.0" # hardcoded crate MSRV, see rust-toolchain.toml etc.
+          # minimal profile includes rustc component which includes cargo and rustdoc
+
+      - uses: rui314/setup-mold@354d1662b2a6f02e5eccc9712f22657621bf645b # does not have recent tags
+
+      - uses: Swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43 # v2.7.0 
+
+      - run: cargo +${{ steps.toolchain.outputs.name }} test --all-targets --all-features --verbose
+
+  cargo-vcpkg-extra:
+    name: "cargo vcpkg && cargo test"
+    permissions:
+      contents: read
+    runs-on: windows-2022
+    steps:
+      - uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - id: toolchain
+        uses: dtolnay/rust-toolchain@439cf607258077187679211f12aa6f19af4a0af7 # doesn't have usual versioned releases/tags
+        with:
+          toolchain: "1.54.0" # hardcoded crate MSRV, see rust-toolchain.toml etc.
+          # minimal profile includes rustc component which includes cargo and rustdoc
+
+      - uses: rui314/setup-mold@354d1662b2a6f02e5eccc9712f22657621bf645b # does not have recent tags
+
+      - uses: Swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43 # v2.7.0
+
+      - uses: taiki-e/install-action@ebb475ef6e41abb770588020cd8c6ca3503cb868 # v2.19.4
+        with:
+          tool: cargo-vcpkg@0.1.7
+
+      - name: expose cache
+        if: ${{ runner.os == 'Windows' }}
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
+      - name: setup cache
+        run: echo "VCPKG_BINARY_SOURCES=clear;x-gha,readwrite" >> "${GITHUB_ENV}"
+        shell: bash
+
+      - run: cargo +${{ steps.toolchain.outputs.name }} vcpkg --verbose build
+
+      - run: cargo +${{ steps.toolchain.outputs.name }} test --all-targets --all-features --verbose
