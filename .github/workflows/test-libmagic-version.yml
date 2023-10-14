@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: "cargo test"
+    name: "cargo test && bindgen"
     permissions:
       contents: read
     strategy:
@@ -32,7 +32,7 @@ jobs:
 
       - run: |
           sudo apt-get update
-          sudo apt-get install automake gcc libtool make python3 zlib1g-dev
+          sudo apt-get install automake gcc libtool make python3 zlib1g-dev llvm-dev libclang-dev clang
 
       - run: curl --output file-${{ matrix.version }}.tgz https://astron.com/pub/file/file-${{ matrix.version }}.tar.gz
 
@@ -65,9 +65,32 @@ jobs:
         with:
           toolchain: "1.54.0" # hardcoded crate MSRV, see rust-toolchain.toml etc.
           # minimal profile includes rustc component which includes cargo and rustdoc
+          components: "rustfmt"
 
       - uses: rui314/setup-mold@354d1662b2a6f02e5eccc9712f22657621bf645b # does not have recent tags
 
       - uses: Swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43 # v2.7.0 
 
       - run: cargo +${{ steps.toolchain.outputs.name }} test --all-targets --all-features --verbose
+
+      - uses: taiki-e/install-action@47d27149ff6b3422864ec504071d5cc7873d642e # v2.20.3
+        with:
+          tool: bindgen-cli@0.68.1
+
+      # bindgen doesn't exactly match crate MSRV
+      - run: >
+          bindgen
+          --use-core
+          --no-size_t-is-usize
+          --allowlist-file '${{ steps.prefix.outputs.dir }}/include/magic.h'
+          --opaque-type 'magic_set'
+          --no-copy 'magic_set'
+          --rust-target '1.47'
+          --output 'bindings.rs'
+          '${{ steps.prefix.outputs.dir }}/include/magic.h'
+
+      - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        with:
+          name: bindgen-${{ matrix.version }}
+          path: |
+            bindings.rs
