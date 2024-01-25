@@ -39,7 +39,55 @@ fn try_vcpkg() -> LibraryResult<vcpkg::Error, vcpkg::Library> {
     }
 }
 
+#[cfg(feature = "bundled")]
+fn try_bundled() {
+    let out_dir = std::env::var("OUT_DIR").unwrap();
+    let out_dir = std::path::Path::new(&out_dir);
+    let include_dir = out_dir.join("include");
+
+    // First, copy magic.h.in into out_dir/include/magic.h, replacing the X.YY
+    // string with the actual versionversion.
+    std::fs::create_dir_all(&include_dir).unwrap();
+    let mut data = std::fs::read_to_string("file/src/magic.h.in").unwrap();
+    data = data.replace("X.YY", "5.45");
+    std::fs::write(include_dir.join("magic.h"), &data).unwrap();
+
+    cc::Build::new()
+        .include("file/src")
+        .include(include_dir)
+        .define("HAVE_UNISTD_H", "1")
+        .define("HAVE_INTTYPES_H", "1")
+        .define("VERSION", "5.45")
+        .file("file/src/buffer.c")
+        .file("file/src/magic.c")
+        .file("file/src/apprentice.c")
+        .file("file/src/softmagic.c")
+        .file("file/src/ascmagic.c")
+        .file("file/src/encoding.c")
+        .file("file/src/compress.c")
+        .file("file/src/is_csv.c")
+        .file("file/src/is_json.c")
+        .file("file/src/is_simh.c")
+        .file("file/src/is_tar.c")
+        .file("file/src/readelf.c")
+        .file("file/src/print.c")
+        .file("file/src/fsmagic.c")
+        .file("file/src/funcs.c")
+        .file("file/src/apptype.c")
+        .file("file/src/der.c")
+        .file("file/src/cdf.c")
+        .file("file/src/cdf_time.c")
+        .file("file/src/readcdf.c")
+        .file("file/src/fmtcheck.c")
+        .compile("magic");
+}
+
 fn main() {
+    #[cfg(feature = "bundled")]
+    {
+        let lib = try_bundled();
+        return;
+    }
     #[cfg(feature = "pkg-config")]
     {
         let lib = try_pkgconfig();
