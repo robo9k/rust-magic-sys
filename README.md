@@ -118,6 +118,11 @@ If you do _not_ use `cargo vcpkg build`, you will have to either
 - `vcpkg install libmagic` and set the `VCPKG_ROOT` environment variable for your `vcpkg` root directory
 - `vcpkg integrate install` your `vcpkg` root user-wide
 
+## vendor
+
+The `vendor` feature uses the [`cc` crate](https:/docs.rs/cc) to compile and
+static link a vendored version of libmagic, currently based on 5.45.
+
 ## Override
 
 If you disable or skip both `pkg-config` and `vcpkg` the `magic-sys` build script will fail.\
