@@ -93,7 +93,9 @@ runs:
 
     - name: update packages
       if: ${{ runner.os == 'Windows' }}
-      run: vcpkg update
+      run: |
+        git -C "${VCPKG_INSTALLATION_ROOT}" pull
+        vcpkg update
       shell: bash
 
     - name: update packages
