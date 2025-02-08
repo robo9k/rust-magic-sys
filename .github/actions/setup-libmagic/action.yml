@@ -110,6 +110,10 @@ runs:
       if: ${{ runner.os == 'Linux' }}
       run: sudo apt-get install libmagic1 libmagic-dev pkg-config
       shell: bash
+    - name: install additional packages
+      if: ${{ runner.os == 'Linux' && inputs.linkage == 'static' }}
+      run: sudo apt-get install libbz2-dev liblzma-dev zlib1g-dev
+      shell: bash
 
     - name: install packages
       if: ${{ runner.os == 'Windows' }}
