@@ -15,7 +15,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        runner: [ubuntu-22.04, windows-2022, macos-12]
+        runner: [ubuntu-24.04, ubuntu-22.04, ubuntu-20.04, windows-2022, windows-2019, macos-14, macos-13]
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
@@ -44,7 +44,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        runner: [ubuntu-22.04, windows-2022, macos-12]
+        runner: [ubuntu-24.04, ubuntu-22.04, ubuntu-20.04, windows-2022, windows-2019, macos-14, macos-13]
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
