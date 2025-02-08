@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         runner: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
@@ -47,6 +48,7 @@ jobs:
     strategy:
       matrix:
         runner: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
