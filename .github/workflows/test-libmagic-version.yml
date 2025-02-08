@@ -13,14 +13,21 @@ jobs:
       contents: read
     strategy:
       matrix:
-        version:
-          - "5.39"
-          - "5.40"
-          - "5.41"
-          - "5.42"
-          - "5.43"
-          - "5.44"
-          - "5.45"
+        include:
+          - version: "5.39"
+            sha512sum: "9cf1a7b769c56eb6f5b25c66ce85fa1300128396e445b2e53dbbd8951e5da973a7a07c4ef9f7ebd1fe945d47bdaf2cd9ef09bd2be6c217a0bcb907d9449835e6"
+          - version: "5.40"
+            sha512sum: "3b70df75fa4c9050d55b1ffdc28e5f3c8b8ef7d4efd1a06bf53f113b676d81114a85aae56e0897d32b53716662d64ad18ab251ca8c92c6405c69eb758bb99afb"
+          - version: "5.41"
+            sha512sum: "bbf2d8e39450b31d0ba8d76d202790fea953775657f942f06e6dc9091798d4a395f7205e542388e4a25b6a4506d07f36c5c4da37cfce0734133e9203a3b00654"
+          - version: "5.42"
+            sha512sum: "33c3c339a561c6cf787cc06a16444a971c62068b01827612c948207a9714107b617bed8148cd67e6280cb1c62ad4dfb1205fb8486ea9c042ce7e19b067d3bb05"
+          - version: "5.43"
+            sha512sum: "9d02f4e7a69d90468d6bd35df5ec240ddee8c2408b7df3e73427d7f18736baf77db0638a1fe8283f4e6abd1d5ad653890ed3a5a0d48bb52d4023ca4070ecdf06"
+          - version: "5.44"
+            sha512sum: "26c3b9c7a6950649d0b2de896bfeca54289febe4cd487c0f91aa6ff1857fa49f9077f8738a17b86100125668a31dae05b586615c564f78da47ac20a1e4a74f63"
+          - version: "5.45"
+            sha512sum: "12611a59ff766c22a55db4b4a9f80f95a0a2e916a1d8593612c6ead32c247102a8fdc23693c6bf81bda9b604d951a62c0051e91580b1b79e190a3504c0efc20a"
 
     runs-on: ubuntu-22.04
     steps:
@@ -35,6 +42,8 @@ jobs:
           sudo apt-get install automake gcc libtool make python3 zlib1g-dev llvm-dev libclang-dev clang
 
       - run: curl --output file-${{ matrix.version }}.tgz https://astron.com/pub/file/file-${{ matrix.version }}.tar.gz
+
+      - run: echo "${{ matrix.sha512sum }} file-${{ matrix.version }}.tgz" | sha512sum --check --status
 
       - run: tar -xzf file-${{ matrix.version }}.tgz
 
