@@ -3,11 +3,11 @@
 //! This crate has the following [features](https://doc.rust-lang.org/cargo/reference/features.html#features):
 //!
 //! - `pkg-config`: Enables using [`pkg-config`](https://www.freedesktop.org/wiki/Software/pkg-config/)
-//! with the [`pkg-config` crate](https://docs.rs/pkg-config) in the build script\
-//! Check the [crate README](https://crates.io/crates/magic#pkg-config) for configuration details
+//!   with the [`pkg-config` crate](https://docs.rs/pkg-config) in the build script  
+//!   Check the [crate README](https://crates.io/crates/magic#pkg-config) for configuration details
 //! - `vcpkg`: Enables using [`vcpkg`](https://vcpkg.io/)
-//! with the [`vcpkg` crate](https://docs.rs/vcpkg) in the build script\
-//! Check the [crate README](https://crates.io/crates/magic#vcpkg) for configuration details
+//!   with the [`vcpkg` crate](https://docs.rs/vcpkg) in the build script  
+//!   Check the [crate README](https://crates.io/crates/magic#vcpkg) for configuration details
 //! - `v5-40`: Enables using API of `libmagic` version 5.40
 //!
 //! The following features are enabled by default:
