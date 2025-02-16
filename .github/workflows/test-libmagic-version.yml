@@ -51,21 +51,28 @@ jobs:
           sudo apt-get update
           sudo apt-get install automake gcc libtool make python3 zlib1g-dev llvm-dev libclang-dev clang
 
-      - run: curl --output file-${{ matrix.version }}.tgz https://astron.com/pub/file/file-${{ matrix.version }}.tar.gz
+      - id: tarball
+        run: echo "file=$(mktemp '${{ runner.temp }}/file-${{ matrix.version }}-XXX.tgz')" >> "${GITHUB_OUTPUT}"
 
-      - run: echo "${{ matrix.sha512sum }} file-${{ matrix.version }}.tgz" | sha512sum --check --status
+      - run: curl --output '${{ steps.tarball.outputs.file }}' 'https://astron.com/pub/file/file-${{ matrix.version }}.tar.gz'
 
-      - run: tar -xzf file-${{ matrix.version }}.tgz
+      - run: echo '${{ matrix.sha512sum }} ${{ steps.tarball.outputs.file }}' | sha512sum --check --status
+
+      - id: release
+        run: |
+          DIR="$(mktemp --directory '${{ runner.temp }}/file-${{ matrix.version }}-release-XXX')"
+          tar --directory "${DIR}" --strip-components=1 -xzf '${{ steps.tarball.outputs.file }}'
+          echo "dir=${DIR}" >> "${GITHUB_OUTPUT}"
 
       - id: prefix
         run: |
-          mkdir _prefix
-          echo "dir=$(readlink -f _prefix)" >> "${GITHUB_OUTPUT}"
+          DIR="$(mktemp --directory '${{ runner.temp }}/file-${{ matrix.version }}-prefix-XXX')"
+          echo "dir=${DIR}" >> "${GITHUB_OUTPUT}"
 
       - run: |
-          cd file-${{ matrix.version }}
+          cd '${{ steps.release.outputs.dir }}'
           autoreconf -f -i
-          ./configure --disable-silent-rules --prefix=${{ steps.prefix.outputs.dir }} --enable-static
+          ./configure --disable-silent-rules --prefix='${{ steps.prefix.outputs.dir }}' --enable-static
           make
           make install
 
@@ -96,6 +103,11 @@ jobs:
         with:
           tool: bindgen-cli@0.68.1
 
+      - id: bindings
+        run: |
+          DIR="$(mktemp --directory '${{ runner.temp }}/file-${{ matrix.version }}-bindings-XXX')"
+          echo "dir=${DIR}" >> "${GITHUB_OUTPUT}"
+
       # bindgen doesn't exactly match crate MSRV
       - run: >
           bindgen
@@ -105,11 +117,11 @@ jobs:
           --opaque-type 'magic_set'
           --no-copy 'magic_set'
           --rust-target '1.47'
-          --output 'bindings.rs'
+          --output '${{ steps.bindings.outputs.dir }}/bindings.rs'
           '${{ steps.prefix.outputs.dir }}/include/magic.h'
 
       - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: bindgen-${{ matrix.version }}
           path: |
-            bindings.rs
+            ${{ steps.bindings.outputs.dir }}/bindings.rs
