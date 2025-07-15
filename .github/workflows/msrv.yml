@@ -1,0 +1,47 @@
+name: "MSRV"
+
+permissions: {}
+
+on:
+  pull_request:
+
+jobs:
+  cargo-msrv:
+    name: "cargo msrv"
+    permissions:
+      contents: read
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        with:
+          persist-credentials: false
+
+      # install toolchain/rustup for running `cargo msrv` itself
+      # https://github.com/foresterre/cargo-msrv/blob/main/README.md#prerequisites
+      - id: toolchain
+        uses: dtolnay/rust-toolchain@d8352f6b1d2e870bc5716e7a6d9b65c4cc244a1a # doesn't have usual versioned releases/tags
+        with:
+          toolchain: stable
+
+      - uses: ./.github/actions/setup-libmagic
+
+      - uses: taiki-e/install-action@47d27149ff6b3422864ec504071d5cc7873d642e # v2.20.3
+        with:
+          tool: cargo-msrv@0.18.4
+
+      - run: cargo msrv --version
+        env:
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
+
+      - run: cargo msrv verify --output-format json
+        env:
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
+
+      - if: ${{ failure() }}
+        run: cargo msrv find --output-format json
+        env:
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
