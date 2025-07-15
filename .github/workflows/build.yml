@@ -15,7 +15,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        runner: [ubuntu-24.04, ubuntu-22.04, ubuntu-20.04, windows-2022, windows-2019, macos-14, macos-13]
+        runner: [ubuntu-24.04, ubuntu-22.04, windows-2025, windows-2022, macos-15, macos-14, macos-13]
       fail-fast: false
     runs-on: ${{ matrix.runner }}
     steps:
@@ -26,16 +26,6 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
 
       - uses: ./.github/actions/setup-libmagic
-
-      - if: ${{ matrix.runner == 'ubuntu-20.04' }}
-        # override build script for dependencies https://packages.ubuntu.com/focal/amd64/libmagic1
-        # no pkg-config on this Ubuntu version
-        run: |
-          mkdir .cargo
-          cat <<EOF > .cargo/config.toml
-          [target.x86_64-unknown-linux-gnu.magic]
-          rustc-link-lib = ["magic", "bz2", "lzma", "z"]
-          EOF
 
       - id: toolchain
         uses: dtolnay/rust-toolchain@439cf607258077187679211f12aa6f19af4a0af7 # doesn't have usual versioned releases/tags
@@ -55,7 +45,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        runner: [ubuntu-24.04, ubuntu-22.04, ubuntu-20.04, windows-2022, windows-2019, macos-14, macos-13]
+        runner: [ubuntu-24.04, ubuntu-22.04, windows-2025, windows-2022, macos-15, macos-14, macos-13]
       fail-fast: false
     runs-on: ${{ matrix.runner }}
     steps:
@@ -66,16 +56,6 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
 
       - uses: ./.github/actions/setup-libmagic
-
-      - if: ${{ matrix.runner == 'ubuntu-20.04' }}
-        # override build script for dependencies https://packages.ubuntu.com/focal/amd64/libmagic1
-        # no pkg-config on this Ubuntu version
-        run: |
-          mkdir .cargo
-          cat <<EOF > .cargo/config.toml
-          [target.x86_64-unknown-linux-gnu.magic]
-          rustc-link-lib = ["magic", "bz2", "lzma", "z"]
-          EOF
 
       - id: toolchain
         uses: dtolnay/rust-toolchain@439cf607258077187679211f12aa6f19af4a0af7 # doesn't have usual versioned releases/tags
