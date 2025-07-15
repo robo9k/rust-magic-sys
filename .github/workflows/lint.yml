@@ -20,6 +20,8 @@ jobs:
           egress-policy: audit
 
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        with:
+          persist-credentials: false
 
       - id: toolchain
         uses: dtolnay/rust-toolchain@d8352f6b1d2e870bc5716e7a6d9b65c4cc244a1a # doesn't have usual versioned releases/tags
@@ -40,6 +42,8 @@ jobs:
           egress-policy: audit
 
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        with:
+          persist-credentials: false
 
       - id: toolchain
         uses: dtolnay/rust-toolchain@d8352f6b1d2e870bc5716e7a6d9b65c4cc244a1a # doesn't have usual versioned releases/tags
@@ -60,6 +64,8 @@ jobs:
           egress-policy: audit
 
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        with:
+          persist-credentials: false
 
       - id: toolchain
         uses: dtolnay/rust-toolchain@d8352f6b1d2e870bc5716e7a6d9b65c4cc244a1a # doesn't have usual versioned releases/tags
