@@ -51,6 +51,8 @@ jobs:
           toolchain: stable
           components: clippy # minimal profile does not include it
 
+      - uses: ./.github/actions/setup-libmagic
+
       - run: cargo +${{ steps.toolchain.outputs.name }} clippy --all-targets --all-features
 
   cargo-rustdoc-clippy:
@@ -72,6 +74,8 @@ jobs:
         with:
           toolchain: nightly
           components: clippy # minimal profile does not include it
+
+      - uses: ./.github/actions/setup-libmagic
 
       # dependency of cargo-rustdoc-clippy
       - run: |
