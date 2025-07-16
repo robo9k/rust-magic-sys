@@ -6,6 +6,7 @@ allow = [
 
 [bans]
 wildcards = "deny"
+external-default-features = "deny"
 
 [sources]
 unknown-registry = "deny"
