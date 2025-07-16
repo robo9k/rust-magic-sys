@@ -32,7 +32,7 @@ jobs:
       - id: toolchain
         uses: dtolnay/rust-toolchain@b3b07ba8b418998c39fb20f53e8b695cdcc8de1b # doesn't have usual versioned releases/tags
         with:
-          toolchain: "1.54.0" # hardcoded crate MSRV, see rust-toolchain.toml etc.
+          toolchain: "1.88.0" # current pinned stable
           # minimal profile includes rustc component which includes cargo and rustdoc
 
       - uses: rui314/setup-mold@702b1908b5edf30d71a8d1666b724e0f0c6fa035 # does not have recent tags
@@ -64,7 +64,7 @@ jobs:
       - id: toolchain
         uses: dtolnay/rust-toolchain@b3b07ba8b418998c39fb20f53e8b695cdcc8de1b # doesn't have usual versioned releases/tags
         with:
-          toolchain: "1.54.0" # hardcoded crate MSRV, see rust-toolchain.toml etc.
+          toolchain: "1.88.0" # current pinned stable
           # minimal profile includes rustc component which includes cargo and rustdoc
 
       - uses: rui314/setup-mold@702b1908b5edf30d71a8d1666b724e0f0c6fa035 # does not have recent tags
