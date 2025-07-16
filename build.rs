@@ -45,13 +45,13 @@ fn main() {
         let lib = try_pkgconfig();
         match lib {
             LibraryResult::Skipped(err) => {
-                println!("pkg-config skipped: {}", err);
+                println!("pkg-config skipped: {err}");
             }
             LibraryResult::Failed(err) => {
-                println!("cargo:warning=pkg-config failed: {}", err);
+                println!("cargo:warning=pkg-config failed: {err}");
             }
             LibraryResult::Success(lib) => {
-                println!("pkg-config success: {:?}", lib);
+                println!("pkg-config success: {lib:?}");
                 return;
             }
         }
@@ -64,13 +64,13 @@ fn main() {
         let lib = try_vcpkg();
         match lib {
             LibraryResult::Skipped(err) => {
-                println!("vcpkg skipped: {}", err);
+                println!("vcpkg skipped: {err}");
             }
             LibraryResult::Failed(err) => {
-                println!("cargo:warning=vcpkg failed: {}", err);
+                println!("cargo:warning=vcpkg failed: {err}");
             }
             LibraryResult::Success(lib) => {
-                println!("vcpkg success: {:?}", lib);
+                println!("vcpkg success: {lib:?}");
                 return;
             }
         }

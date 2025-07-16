@@ -26,6 +26,7 @@ exclude = [
     "nix/",
     "deny.toml",
 ]
+edition = '2021'
 rust-version = "1.64"
 
 [badges]
