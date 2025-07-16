@@ -78,20 +78,6 @@ runs:
         INPUT_LINKAGE: ${{ inputs.linkage }}
 
 
-    # vcpkg cache
-    - name: expose cache
-      if: ${{ runner.os == 'Windows' }}
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
-      with:
-        script: |
-          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
-    - name: setup cache
-      if: ${{ runner.os == 'Windows' }}
-      run: echo "VCPKG_BINARY_SOURCES=clear;x-gha,readwrite" >> "${GITHUB_ENV}"
-      shell: bash
-
-
     # update packages
 
     - name: update packages
