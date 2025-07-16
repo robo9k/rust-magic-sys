@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: © The `magic-sys` Rust crate authors
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+use std::process::ExitCode;
+
 #[cfg(any(feature = "pkg-config", feature = "vcpkg"))]
 enum LibraryResult<E, L> {
     Skipped(E),
@@ -39,7 +41,7 @@ fn try_vcpkg() -> LibraryResult<vcpkg::Error, vcpkg::Library> {
     }
 }
 
-fn main() {
+fn main() -> ExitCode {
     #[cfg(feature = "pkg-config")]
     {
         let lib = try_pkgconfig();
@@ -52,7 +54,7 @@ fn main() {
             }
             LibraryResult::Success(lib) => {
                 println!("pkg-config success: {lib:?}");
-                return;
+                return ExitCode::SUCCESS;
             }
         }
     }
@@ -71,7 +73,7 @@ fn main() {
             }
             LibraryResult::Success(lib) => {
                 println!("vcpkg success: {lib:?}");
-                return;
+                return ExitCode::SUCCESS;
             }
         }
     }
@@ -83,11 +85,12 @@ fn main() {
     // both failed or
     // both features are disabled
     #[cfg(not(any(feature = "pkg-config", feature = "vcpkg")))]
-    println!(
+    eprintln!(
         "the pkg-config and vcpkg features are both disabled, \
         this configuration requires you to override the build script: \
         https://crates.io/crates/magic#override"
     );
 
-    panic!("could not link to `libmagic`");
+    eprintln!("could not link to `libmagic`");
+    ExitCode::FAILURE
 }
