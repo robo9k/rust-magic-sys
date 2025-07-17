@@ -103,7 +103,7 @@ jobs:
 
       - uses: taiki-e/install-action@4fd6bded9bf87df7896958594ca6d67b38b5350e # v2.56.15
         with:
-          tool: bindgen-cli@0.68.1
+          tool: bindgen-cli@0.71.1
 
       - id: bindings
         run: |
@@ -118,7 +118,7 @@ jobs:
           --allowlist-file '${{ steps.prefix.outputs.dir }}/include/magic.h'
           --opaque-type 'magic_set'
           --no-copy 'magic_set'
-          --rust-target '1.47'
+          --rust-target '1.64.0'
           --output '${{ steps.bindings.outputs.dir }}/bindings.rs'
           '${{ steps.prefix.outputs.dir }}/include/magic.h'
 
