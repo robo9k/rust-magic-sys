@@ -18,9 +18,9 @@
 // but you'll still have to get the `libmagic` C library working for your target
 #![cfg_attr(not(test), no_std)]
 
-extern crate libc;
-use libc::c_void;
-use libc::{c_char, c_int, size_t};
+use core::ffi::c_void;
+use core::ffi::{c_char, c_int};
+use usize as size_t; // core::ffi::c_size_t is unstable, but "is currently always usize"
 
 // `libmagic` API as in "magic.h"
 

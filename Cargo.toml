@@ -46,10 +46,6 @@ git = "https://github.com/microsoft/vcpkg"
 rev = "a0f974c66a1c56e974d37b5707e312742aead974" # https://github.com/microsoft/vcpkg/pull/43635
 dependencies = ["libmagic"]
 
-[dependencies.libc]
-version = "0.2.104"
-default-features = false
-
 [package.metadata.vcpkg.target]
 x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
 

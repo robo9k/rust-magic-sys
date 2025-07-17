@@ -9,10 +9,7 @@ wildcards = "deny"
 external-default-features = "deny"
 
 [bans.build]
-allow-build-scripts = [
-    # https://docs.rs/crate/libc/0.2.104/source/build.rs
-    { name = "libc" },
-]
+allow-build-scripts = []
 
 [sources]
 unknown-registry = "deny"
