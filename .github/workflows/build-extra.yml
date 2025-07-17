@@ -103,6 +103,7 @@ jobs:
 
       - uses: taiki-e/install-action@4fd6bded9bf87df7896958594ca6d67b38b5350e # v2.56.15
         with:
+          # renovate: taiki-e/install-action
           tool: cargo-vcpkg@0.1.7
 
       - run: cargo +${{ steps.toolchain.outputs.name }} vcpkg --verbose build
