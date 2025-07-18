@@ -56,3 +56,40 @@ jobs:
       - run: cargo --verbose --version
       - run: cargo build --all-targets --all-features
       - run: cargo test --all-targets --all-features
+
+  cargo-vcpkg-and-build-and-test:
+    name: "cargo vcpkg build && cargo build && cargo test"
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        runner: [windows-2025, windows-2022]
+      fail-fast: false
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - id: toolchain
+        uses: dtolnay/rust-toolchain@b3b07ba8b418998c39fb20f53e8b695cdcc8de1b # doesn't have usual versioned releases/tags
+        with:
+          toolchain: "1.88.0" # current pinned stable
+          # minimal profile includes rustc component which includes cargo and rustdoc
+
+      - run: echo "RUSTUP_TOOLCHAIN=${RUSTUP_TOOLCHAIN}" >> "${GITHUB_ENV}"
+        env:
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
+
+      - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0 
+
+      - uses: taiki-e/install-action@8520ed0913d842fe1061358cb4d010ef346b0ea9 # v2.56.16
+        with:
+          # renovate: taiki-e/install-action
+          tool: cargo-vcpkg@0.1.7
+
+      - run: cargo --verbose --version
+      - run: cargo vcpkg --verbose build
+      - run: echo "LIBMAGIC_NO_PKG_CONFIG=true" >> "${GITHUB_ENV}"
+      - run: cargo build --all-targets --all-features
+      - run: cargo test --all-targets --all-features
