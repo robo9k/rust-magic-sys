@@ -5,6 +5,13 @@ permissions: {}
 on:
   pull_request:
 
+env:
+  RUSTFLAGS: "-Dwarnings"
+  CARGO_INCREMENTAL: "false"
+  CARGO_PROFILE_TEST_DEBUG: "false"
+  CARGO_TERM_VERBOSE: "true"
+  CARGO_TERM_COLOR: "always"
+
 jobs:
   cargo-msrv:
     name: "cargo msrv"
@@ -25,7 +32,13 @@ jobs:
       - id: toolchain
         uses: dtolnay/rust-toolchain@b3b07ba8b418998c39fb20f53e8b695cdcc8de1b # doesn't have usual versioned releases/tags
         with:
-          toolchain: stable
+          toolchain: "1.88.0" # current pinned stable
+
+      - run: echo "RUSTUP_TOOLCHAIN=${RUSTUP_TOOLCHAIN}" >> "${GITHUB_ENV}"
+        env:
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
+
+      - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0 
 
       - uses: ./.github/actions/setup-libmagic
 
@@ -35,14 +48,6 @@ jobs:
           tool: cargo-msrv@0.18.4
 
       - run: cargo msrv --version
-        env:
-          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
-
       - run: cargo msrv verify --output-format json -- cargo test --locked --all-targets --all-features
-        env:
-          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
-
       - if: ${{ failure() }}
         run: cargo msrv find --output-format json -- cargo test --locked --all-targets --all-features
-        env:
-          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
