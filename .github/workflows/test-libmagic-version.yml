@@ -101,7 +101,7 @@ jobs:
 
       - run: cargo +${{ steps.toolchain.outputs.name }} test --locked --all-targets --features '${{ matrix.feature }}' --verbose
 
-      - uses: taiki-e/install-action@8520ed0913d842fe1061358cb4d010ef346b0ea9 # v2.56.16
+      - uses: taiki-e/install-action@c99cc51b309eee71a866715cfa08c922f11cf898 # v2.56.19
         with:
           # renovate: taiki-e/install-action
           tool: bindgen-cli@0.72.0
