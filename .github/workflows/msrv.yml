@@ -38,11 +38,11 @@ jobs:
         env:
           RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
 
-      - run: cargo msrv verify --output-format json
+      - run: cargo msrv verify --output-format json -- cargo test --locked --all-targets --all-features
         env:
           RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
 
       - if: ${{ failure() }}
-        run: cargo msrv find --output-format json
+        run: cargo msrv find --output-format json -- cargo test --locked --all-targets --all-features
         env:
           RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
