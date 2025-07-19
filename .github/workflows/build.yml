@@ -15,6 +15,10 @@ env:
   CARGO_TERM_VERBOSE: "true"
   CARGO_TERM_COLOR: "always"
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build-and-test:
     name: "cargo build && cargo test"
@@ -34,6 +38,15 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
+
+      # disable vcpkg default binary cache
+      - if: ${{ runner.os == 'Windows' }}
+        run: echo "VCPKG_BINARY_SOURCES=clear" >> "${GITHUB_ENV}"
+
+      - if: ${{ runner.os == 'Windows' }}
+        uses: ./.github/actions/vcpkg-files-cache
+        with:
+          cache-key: ${{ matrix.libmagic-linkage }}
 
       - uses: ./.github/actions/setup-libmagic
         with:
@@ -87,6 +100,10 @@ jobs:
         with:
           # renovate: taiki-e/install-action
           tool: cargo-vcpkg@0.1.7
+
+      # disable vcpkg default binary cache
+      - run: echo "VCPKG_BINARY_SOURCES=clear" >> "${GITHUB_ENV}"
+      - uses: ./.github/actions/vcpkg-files-cache
 
       - run: cargo --verbose --version
       - run: cargo vcpkg --verbose build

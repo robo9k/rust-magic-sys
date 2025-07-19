@@ -1,0 +1,45 @@
+name: vcpkg-files-cache
+description: Setup files cache for vcpkg
+
+inputs:
+  directory:
+    description: directory for this vcpkg files cache
+    default: ${{ runner.temp }}/vcpkg-cache/
+  cache-key:
+    description: suffix for computed cache key
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    # create cache directory and key
+    - name: mkdir
+      id: cache-directory
+      run: |
+        mkdir --parents "${INPUT_DIRECTORY}"
+
+        CACHE_DIR=$(realpath "${INPUT_DIRECTORY}")
+        echo "path=${CACHE_DIR}" >> "${GITHUB_OUTPUT}"
+
+        CACHE_DIR_HASH=$(echo "${CACHE_DIR}" | sha256sum)
+        echo "hash=${CACHE_DIR_HASH%% *}" >> "${GITHUB_OUTPUT}"
+      shell: bash
+      env:
+        INPUT_DIRECTORY: ${{ inputs.directory }}
+
+    # add binary source
+    - name: setup vcpkg binary sources
+      run: | # zizmor: ignore[github-env] the variable contents for VCPKG_BINARY_SOURCES come from inputs.directory which is not attacker-controlled, usually
+        BINARY_SOURCE="files,${CACHE_DIR},readwrite"
+        echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES};${BINARY_SOURCE}" >> "${GITHUB_ENV}"
+      shell: bash
+      env:
+        CACHE_DIR: ${{ steps.cache-directory.outputs.path }}
+
+    # setup cache action
+    - name: setup actions/cache
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        key: vcpkg-${{ github.job }}-${{ runner.os }}-${{ steps.cache-directory.outputs.hash }}${{ inputs.cache-key }}
+        path: ${{ steps.cache-directory.outputs.path }}
+        # should have inputs for: lookup-only
