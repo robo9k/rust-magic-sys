@@ -99,7 +99,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0 
 
-      - run: cargo +${{ steps.toolchain.outputs.name }} test --all-targets --features '${{ matrix.feature }}' --verbose
+      - run: cargo +${{ steps.toolchain.outputs.name }} test --locked --all-targets --features '${{ matrix.feature }}' --verbose
 
       - uses: taiki-e/install-action@8520ed0913d842fe1061358cb4d010ef346b0ea9 # v2.56.16
         with:
