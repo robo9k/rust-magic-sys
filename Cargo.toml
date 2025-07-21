@@ -34,11 +34,13 @@ maintenance = { status = "passively-maintained" }
 
 [features]
 default = ["pkg-config", "vcpkg"]
-# the "default" version feature would be v5-39, but that's API-wise the same as v5-38
+## Enable `libmagic` v5.40 API
 v5-40 = []
 
 [build-dependencies]
+## Enable build using `pkg-config`
 pkg-config = { version = "0.3.27", optional = true }
+## Enable build using `vcpkg`
 vcpkg = { version = "0.2.15", optional = true }
 
 [package.metadata.vcpkg]
@@ -53,5 +55,6 @@ x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
 msrv = "1.64.0"
 
 [package.metadata.docs.rs]
-all-features = true
 targets = []
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
