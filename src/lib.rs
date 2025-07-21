@@ -1,19 +1,65 @@
 //! # Features
 //!
-//! This crate has the following [features](https://doc.rust-lang.org/cargo/reference/features.html#features):
+//! ## Build features
+//! - `pkg-config` (_enabled by default_) — Enable build using [`pkg-config`](https://www.freedesktop.org/wiki/Software/pkg-config/) with the [`pkg-config` crate](https://docs.rs/pkg-config)  
+//!   Check the [crate README for `pkg-config` configuration details](https://crates.io/crates/magic#pkg-config)
+//! - `vcpkg` (_enabled by default_) — Enable build using [`vcpkg`](https://vcpkg.io/) with the [`vcpkg` crate](https://docs.rs/vcpkg)  
+//!   Check the [crate README for `vcpkg` configuration details](https://crates.io/crates/magic#vcpkg)
 //!
-//! - `pkg-config`: Enables using [`pkg-config`](https://www.freedesktop.org/wiki/Software/pkg-config/)
-//!   with the [`pkg-config` crate](https://docs.rs/pkg-config) in the build script  
-//!   Check the [crate README](https://crates.io/crates/magic#pkg-config) for configuration details
-//! - `vcpkg`: Enables using [`vcpkg`](https://vcpkg.io/)
-//!   with the [`vcpkg` crate](https://docs.rs/vcpkg) in the build script  
-//!   Check the [crate README](https://crates.io/crates/magic#vcpkg) for configuration details
-//! - `v5-40`: Enables using API of `libmagic` version 5.40
+//! ## `libmagic` API features
+//! - `v5-40` — Enable [`libmagic` v5.40 API](#libmagic-v540)
 //!
-//! The following features are enabled by default:
-//! - `pkg-config`
-//! - `vcpkg`
+//!
+//! # `libmagic` changelog
+//!
+//! The following is a subset of `libmagic` changes that are relevant for this `magic-sys` crate.
+//!
+//! `magic-sys` implements `libmagic` API v5.38 ..= v5.40.  
+//! `magic-sys` requires `libmagic` v5.39 or any newer version to build.  
+//!
+//! ## `libmagic` v5.38
+//!
+//! API baseline.  
+//!
+//! ## `libmagic` v5.39
+//!
+//! No API changes.  
+//! Add `libmagic.pc` to build (statically) with `pkg-config`.  
+//!
+//! ## `libmagic` v5.40
+//!
+//! Add [`MAGIC_PARAM_ENCODING_MAX`].  
+//!
+// not yet implemented
+// ## `libmagic` v5.41
+//
+// No API changes.
+//
+// ## `libmagic` v5.42
+//
+// No API changes.
+//
+// ## `libmagic` v5.43
+//
+// No API changes.
+//
+// ## `libmagic` v5.44
+//
+// Add [`MAGIC_NO_COMPRESS_FORK`].
+//
+// ## `libmagic` v5.45
+//
+// Add [`MAGIC_NO_CHECK_SIMH`].
+// Add [`MAGIC_PARAM_ELF_SHSIZE_MAX`].
+//
+// ## `libmagic` v5.46
+//
+// No API changes.
+//
 
+#![cfg_attr(docsrs, feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg_hide))]
+#![cfg_attr(docsrs, doc(cfg_hide(docsrs)))]
 // Technically this crate doesn't need Rust `std`
 // but you'll still have to get the `libmagic` C library working for your target
 #![cfg_attr(not(test), no_std)]
@@ -96,6 +142,7 @@ pub const MAGIC_PARAM_ELF_SHNUM_MAX: c_int = 3;
 pub const MAGIC_PARAM_ELF_NOTES_MAX: c_int = 4;
 pub const MAGIC_PARAM_REGEX_MAX: c_int = 5;
 pub const MAGIC_PARAM_BYTES_MAX: c_int = 6;
+#[cfg_attr(docsrs, doc(cfg(feature = "v5-40")))]
 #[cfg(feature = "v5-40")]
 pub const MAGIC_PARAM_ENCODING_MAX: c_int = 7;
 

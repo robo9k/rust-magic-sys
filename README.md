@@ -56,15 +56,15 @@ The `libmagic` API is extended with new backwards-compatible features every now 
 To use newly added `libmagic` functionality, you need to use a corresponding `libmagic` version.
 
 You need to specify your `libmagic` version by activating the matching `magic-sys` feature.\
-Each API version has a crate feature like "v5-38" (v5.38 is also the default), see [Cargo.toml](Cargo.toml)\
+Each API version has a crate feature like "v5-40", see [Cargo.toml](Cargo.toml)\
 If you use a different version of `libmagic`, adjust your configuration:
 ```toml
 [dependencies.magic-sys]
 version = "0.3"
 default-features = false
-features = ["v5-41"]
+features = ["v5-40"]
 ```
-Note that those version features are additive, so "v5-41" implies "v5-40" and other previous versions.
+Note that those version features are additive, so "v5-45" implies "v5-44" and other previous versions.
 
 If you want to use a newer/different `libmagic` version, you will have to [link it](#Building) accordingly.
 
