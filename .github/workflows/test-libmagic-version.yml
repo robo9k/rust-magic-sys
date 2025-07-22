@@ -38,7 +38,7 @@ jobs:
           - version: "5.46"
             sha512sum: "a6cb7325c49fd4af159b7555bdd38149e48a5097207acbe5e36deb5b7493ad6ea94d703da6e0edece5bb32959581741f4213707e5cb0528cd46d75a97a5242dc"
             feature: "v5-40"
-
+      fail-fast: false
     runs-on: ubuntu-24.04
     steps:
       - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
@@ -99,7 +99,13 @@ jobs:
 
       - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0 
 
+      - run: cargo +${{ steps.toolchain.outputs.name }} build --verbose --verbose --locked --all-targets --features '${{ matrix.feature }}'
+
       - run: cargo +${{ steps.toolchain.outputs.name }} test --locked --all-targets --features '${{ matrix.feature }}' --verbose
+
+      - run: |
+          cd systest
+          cargo run --features '${{ matrix.feature }}'
 
       - uses: taiki-e/install-action@c99cc51b309eee71a866715cfa08c922f11cf898 # v2.56.19
         with:
