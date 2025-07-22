@@ -53,6 +53,16 @@ fn main() -> ExitCode {
                 println!("cargo:warning=pkg-config failed: {err}");
             }
             LibraryResult::Success(lib) => {
+                let includes = std::env::join_paths(lib.include_paths.iter())
+                    .expect("parsed include paths from `pkg-config` should be joinable");
+                if includes.is_empty() {
+                    let includedir = pkg_config::get_variable("libmagic", "includedir")
+                        .expect("`pkg-config` package 'libmagic' should be found previously");
+                    println!("cargo:include={includedir}");
+                } else {
+                    println!("cargo:include={}", includes.to_string_lossy());
+                }
+
                 println!("pkg-config success: {lib:?}");
                 return ExitCode::SUCCESS;
             }
@@ -72,6 +82,12 @@ fn main() -> ExitCode {
                 println!("cargo:warning=vcpkg failed: {err}");
             }
             LibraryResult::Success(lib) => {
+                let includes = std::env::join_paths(lib.include_paths.iter())
+                    .expect("include paths from `vcpkg` should be joinable");
+                if !includes.is_empty() {
+                    println!("cargo:include={}", includes.to_string_lossy());
+                }
+
                 println!("vcpkg success: {lib:?}");
                 return ExitCode::SUCCESS;
             }
