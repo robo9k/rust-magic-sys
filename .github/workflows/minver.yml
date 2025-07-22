@@ -57,5 +57,5 @@ jobs:
       - run: cargo hack --version
       - run: cargo minimal-versions --version
 
-      - run: cargo minimal-versions build --all-targets --all-features
+      - run: cargo minimal-versions build --verbose --verbose --all-targets --all-features
       - run: cargo minimal-versions test --all-targets --all-features
