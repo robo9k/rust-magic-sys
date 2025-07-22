@@ -102,11 +102,25 @@ runs:
 
     - name: install packages
       if: ${{ runner.os == 'Linux' }}
-      run: sudo apt-get install libmagic1 libmagic-dev pkg-config
+      run: |
+        . /etc/os-release
+
+        if [ "${VERSION_ID}" = "22.04" ] ; then
+          sudo apt-get install libmagic1 libmagic-dev pkgconf
+        elif [ "${VERSION_ID}" = "24.04" ] ; then
+          sudo apt-get install libmagic1 libmagic-dev pkg-config
+        fi
       shell: bash
     - name: install additional packages
       if: ${{ runner.os == 'Linux' && inputs.linkage == 'static' }}
-      run: sudo apt-get install libbz2-dev liblzma-dev zlib1g-dev
+      run: |
+        . /etc/os-release
+
+        if [ "${VERSION_ID}" = "22.04" ] ; then
+          sudo apt-get install libbz2-dev liblzma-dev zlib1g-dev
+        elif [ "${VERSION_ID}" = "24.04" ] ; then
+          sudo apt-get install --no-install-recommends libbz2-dev liblzma-dev zlib1g-dev
+        fi
       shell: bash
 
     - name: install packages
@@ -120,5 +134,5 @@ runs:
 
     - name: install packages
       if: ${{ runner.os == 'macOS' }}
-      run: brew install libmagic pkg-config
+      run: brew install libmagic pkgconf
       shell: bash
