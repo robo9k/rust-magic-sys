@@ -159,7 +159,7 @@ extern "C" {
     pub fn magic_getpath(magicfile: *const c_char, action: c_int) -> *const c_char;
     pub fn magic_file(cookie: magic_t, filename: *const c_char) -> *const c_char;
     pub fn magic_descriptor(cookie: magic_t, fd: c_int) -> *const c_char;
-    pub fn magic_buffer(cookie: magic_t, buffer: *const u8, length: size_t) -> *const c_char;
+    pub fn magic_buffer(cookie: magic_t, buffer: *const c_void, length: size_t) -> *const c_char;
 
     pub fn magic_error(cookie: magic_t) -> *const c_char;
     pub fn magic_getflags(cookie: magic_t) -> c_int;
