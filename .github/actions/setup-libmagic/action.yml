@@ -1,9 +1,19 @@
 name: setup-libmagic
 description: Setup some version of `libmagic` for `magic-sys`
+
 inputs:
   linkage:
     description: 'How to link (against `libmagic`): "static" / "dynamic"'
     default: static
+
+outputs:
+  libmagic-version:
+    description: 'Version of the setup `libmagic` library, e.g. 5.39'
+    value: ${{ steps.libmagic-version.outputs.version }}
+
+  crate-features:
+    description: 'Crate features for `magic-sys` required for this `libmagic` setup'
+    value: ${{ steps.crate-features.outputs.features }}
 
 runs:
   using: 'composite'
@@ -23,18 +33,22 @@ runs:
     # setup environment
 
     - name: setup environment
-      if: ${{ runner.os == 'Linux' }}
-      run: echo "VCPKGRS_NO_LIBMAGIC=1" >> "${GITHUB_ENV}"
-      shell: bash
-
-    - name: setup environment
-      if: ${{ runner.os == 'Windows' }}
-      run: echo "LIBMAGIC_NO_PKG_CONFIG=1" >> "${GITHUB_ENV}"
-      shell: bash
-
-    - name: setup environment
-      if: ${{ runner.os == 'macOS' }}
-      run: echo "VCPKGRS_NO_LIBMAGIC=1" >> "${GITHUB_ENV}"
+      id: build-environment
+      run: |
+        case '${{ runner.os }}' in
+          'Linux')
+            echo 'VCPKGRS_NO_LIBMAGIC=1' >> "${GITHUB_ENV}"
+            echo 'features=pkg-config' >> "${GITHUB_OUTPUT}"
+          ;;
+          'Windows')
+            echo 'LIBMAGIC_NO_PKG_CONFIG=1' >> "${GITHUB_ENV}"
+            echo 'features=vcpkg' >> "${GITHUB_OUTPUT}"
+          ;;
+          'macOS')
+            echo 'VCPKGRS_NO_LIBMAGIC=1' >> "${GITHUB_ENV}"
+            echo 'features=pkg-config' >> "${GITHUB_OUTPUT}"
+          ;;
+        esac
       shell: bash
 
 
@@ -135,4 +149,45 @@ runs:
     - name: install packages
       if: ${{ runner.os == 'macOS' }}
       run: brew install libmagic pkgconf
+      shell: bash
+
+
+    # determine libmagic version
+
+    - name: determine libmagic version
+      id: libmagic-version
+      run: |
+        case '${{ runner.os }}' in
+          'Linux')
+            modversion=$(pkg-config --modversion libmagic)
+          ;;
+          'Windows')
+            VCPKG_TRIPLET=x64-windows
+            VCPKG_DEFAULT_TRIPLET="${VCPKG_TRIPLET}" vcpkg install --no-print-usage pkgconf
+            PKG_CONFIG="${VCPKG_INSTALLATION_ROOT}\\installed\\${VCPKG_TRIPLET}\\tools\\pkgconf\\pkgconf.exe"
+            modversion=$(PKG_CONFIG_PATH="${VCPKG_INSTALLATION_ROOT}\\installed\\${VCPKG_TRIPLET}\\lib\\pkgconfig\\" "${PKG_CONFIG}" --modversion libmagic)
+          ;;
+          'macOS')
+            modversion=$(pkg-config --modversion libmagic)
+          ;;
+        esac
+
+        echo "libmagic version: ${modversion}"
+        echo "version=${modversion}" >> "${GITHUB_OUTPUT}"
+      shell: bash
+
+
+    # determine crate features
+
+    - name: determine crate features
+      id: crate-features
+      run: |
+        version_feature=$(./.github/libmagic-version-to-crate-feature.sh "${LIBMAGIC_VERSION}")
+        features="${BUILD_FEATURES} ${version_feature}"
+
+        echo "required 'magic-sys' crate features: ${features}"
+        echo "features=${features}" >> "${GITHUB_OUTPUT}"
+      env:
+        LIBMAGIC_VERSION: ${{ steps.libmagic-version.outputs.version }}
+        BUILD_FEATURES: ${{ steps.build-environment.outputs.features }}
       shell: bash

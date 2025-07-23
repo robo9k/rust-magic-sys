@@ -48,7 +48,8 @@ jobs:
         with:
           cache-key: ${{ matrix.libmagic-linkage }}
 
-      - uses: ./.github/actions/setup-libmagic
+      - id: setup-libmagic
+        uses: ./.github/actions/setup-libmagic
         with:
           linkage: ${{ matrix.libmagic-linkage }}
 
@@ -67,8 +68,12 @@ jobs:
       - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0 
 
       - run: cargo --verbose --version
-      - run: cargo build --verbose --verbose --locked --all-targets --all-features
-      - run: cargo test --locked --all-targets --all-features
+      - run: cargo build --verbose --verbose --locked --all-targets --no-default-features --features "${FEATURES}"
+        env:
+          FEATURES: ${{ steps.setup-libmagic.outputs.crate-features }}
+      - run: cargo test --locked --all-targets --no-default-features --features "${FEATURES}"
+        env:
+          FEATURES: ${{ steps.setup-libmagic.outputs.crate-features }}
 
   cargo-vcpkg-and-build-and-test:
     name: "cargo vcpkg build && cargo build && cargo test"
@@ -106,7 +111,35 @@ jobs:
       - uses: ./.github/actions/vcpkg-files-cache
 
       - run: cargo --verbose --version
+
       - run: cargo vcpkg --verbose build
       - run: echo "LIBMAGIC_NO_PKG_CONFIG=true" >> "${GITHUB_ENV}"
-      - run: cargo build --verbose --verbose --locked --all-targets --all-features
-      - run: cargo test --locked --all-targets --all-features
+
+      - id: libmagic-version
+        run: |
+          VCPKG_INSTALLATION_ROOT="${{ github.workspace }}\\target\\vcpkg"
+          VCPKG="${VCPKG_INSTALLATION_ROOT}\\vcpkg.exe"
+          VCPKG_TRIPLET=x64-windows
+          VCPKG_DEFAULT_TRIPLET="${VCPKG_TRIPLET}" "${VCPKG}" install --vcpkg-root "${VCPKG_INSTALLATION_ROOT}" --no-print-usage pkgconf
+          PKG_CONFIG="${VCPKG_INSTALLATION_ROOT}\\installed\\${VCPKG_TRIPLET}\\tools\\pkgconf\\pkgconf.exe"
+          modversion=$(PKG_CONFIG_PATH="${VCPKG_INSTALLATION_ROOT}\\installed\\${VCPKG_TRIPLET}\\lib\\pkgconfig\\" "${PKG_CONFIG}" --modversion libmagic)
+
+          echo "libmagic version: ${modversion}"
+          echo "version=${modversion}" >> "${GITHUB_OUTPUT}"
+
+      - id: crate-features
+        run: |
+          version_feature=$(./.github/libmagic-version-to-crate-feature.sh "${LIBMAGIC_VERSION}")
+          features="vcpkg ${version_feature}"
+
+          echo "required 'magic-sys' crate features: ${features}"
+          echo "crate-features=${features}" >> "${GITHUB_OUTPUT}"
+        env:
+          LIBMAGIC_VERSION: ${{ steps.libmagic-version.outputs.version }}
+
+      - run: cargo build --verbose --verbose --locked --all-targets --no-default-features --features "${FEATURES}"
+        env:
+          FEATURES: ${{ steps.crate-features.outputs.crate-features }}
+      - run: cargo test --locked --all-targets --no-default-features --features "${FEATURES}"
+        env:
+          FEATURES: ${{ steps.crate-features.outputs.crate-features }}
