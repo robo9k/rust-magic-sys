@@ -6,13 +6,12 @@ inputs:
     description: directory for this vcpkg files cache
     default: ${{ runner.temp }}/vcpkg-cache/
   cache-key:
-    description: suffix for computed cache key
-    required: false
+    description: cache key
 
 runs:
   using: 'composite'
   steps:
-    # create cache directory and key
+    # create cache directory
     - name: mkdir
       id: cache-directory
       run: |
@@ -20,9 +19,6 @@ runs:
 
         CACHE_DIR=$(realpath "${INPUT_DIRECTORY}")
         echo "path=${CACHE_DIR}" >> "${GITHUB_OUTPUT}"
-
-        CACHE_DIR_HASH=$(echo "${CACHE_DIR}" | sha256sum)
-        echo "hash=${CACHE_DIR_HASH%% *}" >> "${GITHUB_OUTPUT}"
       shell: bash
       env:
         INPUT_DIRECTORY: ${{ inputs.directory }}
@@ -40,6 +36,6 @@ runs:
     - name: setup actions/cache
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       with:
-        key: vcpkg-${{ github.job }}-${{ runner.os }}-${{ steps.cache-directory.outputs.hash }}${{ inputs.cache-key }}
+        key: ${{ inputs.cache-key }}
         path: ${{ steps.cache-directory.outputs.path }}
         # should have inputs for: lookup-only

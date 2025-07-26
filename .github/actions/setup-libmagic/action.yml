@@ -112,6 +112,27 @@ runs:
       shell: bash
 
 
+    # vcpkg files cache
+
+    - name: determine vcpkg cache key
+      id: cache-key
+      if: ${{ runner.os == 'Windows' }}
+      run: |
+        vcpkg_rev=$(git -C "${VCPKG_INSTALLATION_ROOT}" rev-parse HEAD)
+        cache_key="vcpkg-${vcpkg_rev}-windows-${INPUT_LINKAGE}-libmagic+pkgconf"
+
+        echo "key=${cache_key}" >> "${GITHUB_OUTPUT}"
+      env:
+        INPUT_LINKAGE: ${{ inputs.linkage }}
+      shell: bash
+
+    - name: setup vcpkg files cache
+      if: ${{ runner.os == 'Windows' }}
+      uses: ./.github/actions/vcpkg-files-cache
+      with:
+        cache-key: ${{ steps.cache-key.outputs.key }}
+
+
     # install packages
 
     - name: install packages
