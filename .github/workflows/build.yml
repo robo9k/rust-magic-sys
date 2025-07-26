@@ -43,11 +43,6 @@ jobs:
       - if: ${{ runner.os == 'Windows' }}
         run: echo "VCPKG_BINARY_SOURCES=clear" >> "${GITHUB_ENV}"
 
-      - if: ${{ runner.os == 'Windows' }}
-        uses: ./.github/actions/vcpkg-files-cache
-        with:
-          cache-key: ${{ matrix.libmagic-linkage }}
-
       - id: setup-libmagic
         uses: ./.github/actions/setup-libmagic
         with:
@@ -108,7 +103,18 @@ jobs:
 
       # disable vcpkg default binary cache
       - run: echo "VCPKG_BINARY_SOURCES=clear" >> "${GITHUB_ENV}"
+
+      - id: cache-key
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          vcpkg_rev=$(cargo metadata --format-version 1 --no-deps | jq --raw-output '.packages[] | select(.name == "magic-sys").metadata.vcpkg.rev')
+          cache_key="cargo-vcpkg-${vcpkg_rev}-windows-libmagic+pkgconf"
+
+          echo "key=${cache_key}" >> "${GITHUB_OUTPUT}"
+
       - uses: ./.github/actions/vcpkg-files-cache
+        with:
+          cache-key: ${{ steps.cache-key.outputs.key }}
 
       - run: cargo --verbose --version
 
