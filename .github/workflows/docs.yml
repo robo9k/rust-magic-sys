@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   build-rustdoc:
-    name: "cargo doc"
+    name: "cargo docs-rs"
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -43,9 +43,12 @@ jobs:
         env:
           RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
 
-      - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0 
+      - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0
 
-      - uses: ./.github/actions/setup-libmagic
+      - uses: taiki-e/install-action@11601f56230cbf5e7e891d41320906e40ca52d79 # v2.57.0
+        with:
+          # renovate: taiki-e/install-action
+          tool: cargo-docs-rs@0.1.17
 
       - run: |
           crate_version=$(cargo metadata --format-version 1 --no-deps | jq --raw-output '.packages[] | select(.name == "magic-sys").version')
@@ -57,7 +60,9 @@ jobs:
         env:
           SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - run: RUSTDOCFLAGS="-Dwarnings --crate-version ${VER}+${REV} -Z unstable-options --enable-index-page" cargo doc --locked --no-deps --all-features
+      - run: cargo docs-rs --version
+
+      - run: RUSTDOCFLAGS="--crate-version ${VER}+${REV} --enable-index-page" cargo docs-rs --verbose --color always --locked --target-dir 'target/doc'
         env:
           VER: ${{ steps.crate-info.outputs.ver }}
           REV: ${{ steps.crate-info.outputs.rev }}
@@ -72,7 +77,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:
-          path: target/doc/
+          path: target/doc/x86_64-unknown-linux-gnu/doc/
 
   deploy-pages:
     name: "deploy GitHub Pages"

@@ -42,6 +42,11 @@ fn try_vcpkg() -> LibraryResult<vcpkg::Error, vcpkg::Library> {
 }
 
 fn main() -> ExitCode {
+    if std::env::var("DOCS_RS").is_ok() {
+        println!("docs.rs detected, skipping build script");
+        return ExitCode::SUCCESS;
+    }
+
     #[cfg(feature = "pkg-config")]
     {
         let lib = try_pkgconfig();
