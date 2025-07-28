@@ -15,7 +15,7 @@ This [cargo -sys package](https://doc.rust-lang.org/cargo/reference/build-script
 
 ```toml
 [dependencies]
-magic-sys = "0.3"
+magic-sys = "0.4"
 ```
 
 The `rustdoc` is available on [docs.rs](https://docs.rs/magic-sys).
