@@ -4,13 +4,14 @@ version = "0.1.0"
 # ctest doesn't support "unsafe extern C" in edition 2024
 edition = "2021"
 build = "build.rs"
+publish = false
 
 [features]
 v5-40 = ["magic-sys/v5-40"]
 
 [dependencies]
 libc = "0.2"
-magic-sys = { version = "0.3.0", path = ".." }
+magic-sys = { path = ".." }
 
 [build-dependencies]
 ctest = "0.4"
