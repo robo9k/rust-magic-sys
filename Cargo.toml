@@ -16,15 +16,9 @@ license = "MIT OR Apache-2.0"
 version = "0.4.0-alpha.1"
 authors = ["robo9k <robo9k@symlink.io>"]
 links = "magic"
-exclude = [
-    ".gitignore",
-    ".gitattributes",
-    "/.github/",
-    "/.vscode/",
-    "rust-toolchain.toml",
-    "shell.nix",
-    "nix/",
-    "deny.toml",
+include = [
+    "src/",
+    "build.rs",
 ]
 edition = '2021'
 rust-version = "1.64"
