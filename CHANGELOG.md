@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0-alpha.2](https://github.com/robo9k/rust-magic-sys/compare/v0.4.0-alpha.1...v0.4.0-alpha.2) - 2025-07-29
+
+### Fixed
+
+- Only `include` required files in .crate
+
+### Other
+
+- Fix crate `license` SPDX expression
+
 ## [0.4.0-alpha.1](https://github.com/robo9k/rust-magic-sys/compare/v0.3.0...v0.4.0-alpha.1) - 2025-07-28
 
 This version adds `pkg-config` as an alternative default feature to the existing `vcpkg` build. The `vcpkg` build is now an optional default feature.  
