@@ -7,17 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.0-alpha.2](https://github.com/robo9k/rust-magic-sys/compare/v0.4.0-alpha.1...v0.4.0-alpha.2) - 2025-07-29
-
-### Fixed
-
-- Only `include` required files in .crate
-
-### Other
-
-- Fix crate `license` SPDX expression
-
-## [0.4.0-alpha.1](https://github.com/robo9k/rust-magic-sys/compare/v0.3.0...v0.4.0-alpha.1) - 2025-07-28
+## [0.4.0](https://github.com/robo9k/rust-magic-sys/compare/v0.3.0...v0.4.0) - 2025-07-31
 
 This version adds `pkg-config` as an alternative default feature to the existing `vcpkg` build. The `vcpkg` build is now an optional default feature.  
 The optional dependency on `pkg-config` bumps the build requirement on the `libmagic` C library to version 5.39 (from 2020-06-14) or newer.  
@@ -38,9 +28,11 @@ The minimum supported Rust version (MSRV) is now 1.64
 ### Fixed
 
 - [**breaking**] Fix C type of `buffer` param in `magic_buffer`
+- Only `include` required files in .crate
 
 ### Other
 
 - Bump MSRV to 1.64
 - Replace `libc` crate dependency with `core::ffi`
 - Update pinned revision for `cargo-vcpkg`
+- Fix crate `license` SPDX expression
