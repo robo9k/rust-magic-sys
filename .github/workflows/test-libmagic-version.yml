@@ -107,7 +107,7 @@ jobs:
           cd systest
           cargo run --features '${{ matrix.feature }}'
 
-      - uses: taiki-e/install-action@aa2649f25ee7099207734772f5393fd30167cb73 # v2.58.0
+      - uses: taiki-e/install-action@f37a1e4d34f3e1c6a571e294b0258f2805eab48d # v2.58.4
         with:
           # renovate: taiki-e/install-action
           tool: bindgen-cli@0.72.0
