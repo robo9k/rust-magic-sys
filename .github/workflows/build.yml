@@ -49,7 +49,7 @@ jobs:
           linkage: ${{ matrix.libmagic-linkage }}
 
       - id: toolchain
-        uses: dtolnay/rust-toolchain@b3b07ba8b418998c39fb20f53e8b695cdcc8de1b # doesn't have usual versioned releases/tags
+        uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # doesn't have usual versioned releases/tags
         with:
           toolchain: "1.88.0" # current pinned stable
           # minimal profile includes rustc component which includes cargo and rustdoc
@@ -85,7 +85,7 @@ jobs:
           persist-credentials: false
 
       - id: toolchain
-        uses: dtolnay/rust-toolchain@b3b07ba8b418998c39fb20f53e8b695cdcc8de1b # doesn't have usual versioned releases/tags
+        uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # doesn't have usual versioned releases/tags
         with:
           toolchain: "1.88.0" # current pinned stable
           # minimal profile includes rustc component which includes cargo and rustdoc
