@@ -8,6 +8,8 @@ publish = false
 
 [features]
 v5-40 = ["magic-sys/v5-40"]
+v5-44 = ["magic-sys/v5-44"]
+v5-45 = ["magic-sys/v5-45"]
 
 [dependencies]
 libc = "0.2"
