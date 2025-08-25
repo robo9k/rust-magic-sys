@@ -89,18 +89,21 @@ jobs:
 
       - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0 
 
-      - run: cargo +${{ steps.toolchain.outputs.name }} build --verbose --verbose --locked --all-targets --features "${CRATE_LIBMAGIC_VERSION_FEATURE}"
+      - run: cargo build --verbose --verbose --locked --all-targets --features "${CRATE_LIBMAGIC_VERSION_FEATURE}"
         env:
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
           CRATE_LIBMAGIC_VERSION_FEATURE: ${{ steps.release.outputs.feature }}
 
-      - run: cargo +${{ steps.toolchain.outputs.name }} test --locked --all-targets --features "${CRATE_LIBMAGIC_VERSION_FEATURE}" --verbose
+      - run: cargo test --locked --all-targets --features "${CRATE_LIBMAGIC_VERSION_FEATURE}" --verbose
         env:
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
           CRATE_LIBMAGIC_VERSION_FEATURE: ${{ steps.release.outputs.feature }}
 
       - run: |
           cd systest
           cargo run --features "${CRATE_LIBMAGIC_VERSION_FEATURE}"
         env:
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
           CRATE_LIBMAGIC_VERSION_FEATURE: ${{ steps.release.outputs.feature }}
 
       - uses: taiki-e/install-action@f63c33fd96cc1e69a29bafd06541cf28588b43a4 # v2.58.21
