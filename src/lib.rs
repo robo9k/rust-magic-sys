@@ -8,13 +8,15 @@
 //!
 //! ## `libmagic` API features
 //! - `v5-40` — Enable [`libmagic` v5.40 API](#libmagic-v540)
+//! - `v5-44` — Enable [`libmagic` v5.44 API](#libmagic-v544)
+//! - `v5-45` — Enable [`libmagic` v5.45 API](#libmagic-v545)
 //!
 //!
 //! # `libmagic` changelog
 //!
 //! The following is a subset of `libmagic` changes that are relevant for this `magic-sys` crate.
 //!
-//! `magic-sys` implements `libmagic` API v5.38 ..= v5.40.  
+//! `magic-sys` implements `libmagic` API v5.38 ..= v5.46.  
 //! `magic-sys` requires `libmagic` v5.39 or any newer version to build.  
 //!
 //! ## `libmagic` v5.38
@@ -30,32 +32,32 @@
 //!
 //! Add [`MAGIC_PARAM_ENCODING_MAX`].  
 //!
-// not yet implemented
-// ## `libmagic` v5.41
-//
-// No API changes.
-//
-// ## `libmagic` v5.42
-//
-// No API changes.
-//
-// ## `libmagic` v5.43
-//
-// No API changes.
-//
-// ## `libmagic` v5.44
-//
-// Add [`MAGIC_NO_COMPRESS_FORK`].
-//
-// ## `libmagic` v5.45
-//
-// Add [`MAGIC_NO_CHECK_SIMH`].
-// Add [`MAGIC_PARAM_ELF_SHSIZE_MAX`].
-//
-// ## `libmagic` v5.46
-//
-// No API changes.
-//
+//! ## `libmagic` v5.41
+//!
+//! No API changes.
+//!
+//! ## `libmagic` v5.42
+//!
+//! No API changes.
+//!
+//! ## `libmagic` v5.43
+//!
+//! No API changes.
+//!
+//! ## `libmagic` v5.44
+//!
+//! Add [`MAGIC_NO_COMPRESS_FORK`].
+//!
+//! ## `libmagic` v5.45
+//!
+//! Add [`MAGIC_NO_CHECK_SIMH`].  
+//! Add [`MAGIC_PARAM_ELF_SHSIZE_MAX`].  
+//! Change [`MAGIC_NO_CHECK_BUILTIN`].  
+//!
+//! ## `libmagic` v5.46
+//!
+//! No API changes.
+//!
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![cfg_attr(docsrs, feature(doc_cfg_hide))]
@@ -97,6 +99,9 @@ pub const MAGIC_MIME: c_int = MAGIC_MIME_TYPE | MAGIC_MIME_ENCODING;
 pub const MAGIC_APPLE: c_int = 0x00_0800;
 pub const MAGIC_EXTENSION: c_int = 0x100_0000;
 pub const MAGIC_COMPRESS_TRANSP: c_int = 0x200_0000;
+#[cfg_attr(docsrs, doc(cfg(feature = "v5-44")))]
+#[cfg(feature = "v5-44")]
+pub const MAGIC_NO_COMPRESS_FORK: c_int = 0x400_0000;
 pub const MAGIC_NODESC: c_int = MAGIC_EXTENSION | MAGIC_MIME | MAGIC_APPLE;
 
 pub const MAGIC_NO_CHECK_COMPRESS: c_int = 0x000_1000;
@@ -110,7 +115,11 @@ pub const MAGIC_NO_CHECK_CSV: c_int = 0x008_0000;
 pub const MAGIC_NO_CHECK_TOKENS: c_int = 0x010_0000;
 pub const MAGIC_NO_CHECK_ENCODING: c_int = 0x020_0000;
 pub const MAGIC_NO_CHECK_JSON: c_int = 0x040_0000;
+#[cfg_attr(docsrs, doc(cfg(feature = "v5-45")))]
+#[cfg(feature = "v5-45")]
+pub const MAGIC_NO_CHECK_SIMH: c_int = 0x080_0000;
 
+#[cfg(not(feature = "v5-45"))]
 pub const MAGIC_NO_CHECK_BUILTIN: c_int = MAGIC_NO_CHECK_COMPRESS |
 MAGIC_NO_CHECK_TAR      |
 // MAGIC_NO_CHECK_SOFT  |
@@ -122,6 +131,20 @@ MAGIC_NO_CHECK_CDF      |
 MAGIC_NO_CHECK_TOKENS   |
 MAGIC_NO_CHECK_ENCODING |
 MAGIC_NO_CHECK_JSON;
+
+#[cfg(feature = "v5-45")]
+pub const MAGIC_NO_CHECK_BUILTIN: c_int = MAGIC_NO_CHECK_COMPRESS |
+MAGIC_NO_CHECK_TAR      |
+// MAGIC_NO_CHECK_SOFT  |
+MAGIC_NO_CHECK_APPTYPE  |
+MAGIC_NO_CHECK_ELF      |
+MAGIC_NO_CHECK_TEXT     |
+MAGIC_NO_CHECK_CSV      |
+MAGIC_NO_CHECK_CDF      |
+MAGIC_NO_CHECK_TOKENS   |
+MAGIC_NO_CHECK_ENCODING |
+MAGIC_NO_CHECK_JSON     |
+MAGIC_NO_CHECK_SIMH;
 
 #[deprecated]
 pub const MAGIC_NO_CHECK_ASCII: c_int = MAGIC_NO_CHECK_TEXT;
@@ -145,6 +168,9 @@ pub const MAGIC_PARAM_BYTES_MAX: c_int = 6;
 #[cfg_attr(docsrs, doc(cfg(feature = "v5-40")))]
 #[cfg(feature = "v5-40")]
 pub const MAGIC_PARAM_ENCODING_MAX: c_int = 7;
+#[cfg_attr(docsrs, doc(cfg(feature = "v5-45")))]
+#[cfg(feature = "v5-45")]
+pub const MAGIC_PARAM_ELF_SHSIZE_MAX: c_int = 8;
 
 // NOTE: the following are from `file.h`, but part of `magic.h` API
 pub const FILE_LOAD: c_int = 0;
@@ -259,6 +285,8 @@ mod tests {
         unsafe {
             let _ = magic_setflags(std::ptr::null_mut(), MAGIC_NONE);
         }
+
+        // libmagic accepts basically any invalid flag except MAGIC_PRESERVE_ATIME
     }
 
     #[test]
@@ -334,6 +362,48 @@ mod tests {
                 MAGIC_PARAM_INDIR_MAX,
                 std::ptr::null_mut(),
             );
+        }
+
+        #[cfg(feature = "v5-40")]
+        {
+            let mgc = unsafe { magic_open(MAGIC_NONE) };
+            assert_ne!(mgc, std::ptr::null_mut());
+
+            let mut val: size_t = 0;
+
+            let rv = unsafe {
+                magic_getparam(
+                    mgc,
+                    MAGIC_PARAM_ENCODING_MAX,
+                    &mut val as *mut size_t as *mut _,
+                )
+            };
+            assert_ne!(rv, -1);
+
+            unsafe {
+                magic_close(mgc);
+            }
+        }
+
+        #[cfg(feature = "v5-45")]
+        {
+            let mgc = unsafe { magic_open(MAGIC_NONE) };
+            assert_ne!(mgc, std::ptr::null_mut());
+
+            let mut val: size_t = 0;
+
+            let rv = unsafe {
+                magic_getparam(
+                    mgc,
+                    MAGIC_PARAM_ELF_SHSIZE_MAX,
+                    &mut val as *mut size_t as *mut _,
+                )
+            };
+            assert_ne!(rv, -1);
+
+            unsafe {
+                magic_close(mgc);
+            }
         }
     }
 }
