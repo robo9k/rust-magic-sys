@@ -106,7 +106,7 @@ jobs:
           RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
           CRATE_LIBMAGIC_VERSION_FEATURE: ${{ steps.release.outputs.feature }}
 
-      - uses: taiki-e/install-action@f63c33fd96cc1e69a29bafd06541cf28588b43a4 # v2.58.21
+      - uses: taiki-e/install-action@cbbd2313f89ec137914d3e35d4669f76aca5c947 # v2.58.26
         with:
           # renovate: taiki-e/install-action
           tool: bindgen-cli@0.72.0
