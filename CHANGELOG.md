@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1](https://github.com/robo9k/rust-magic-sys/compare/v0.4.0...v0.4.1) - 2025-08-28
+
+### Added
+
+- Add support for `libmagic` v5.44 and v5.45 API
+
 ## [0.4.0](https://github.com/robo9k/rust-magic-sys/compare/v0.3.0...v0.4.0) - 2025-07-31
 
 This version adds `pkg-config` as an alternative default feature to the existing `vcpkg` build. The `vcpkg` build is now an optional default feature.  
