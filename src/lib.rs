@@ -60,8 +60,7 @@
 //!
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
-#![cfg_attr(docsrs, feature(doc_cfg_hide))]
-#![cfg_attr(docsrs, doc(cfg_hide(docsrs)))]
+#![cfg_attr(docsrs, doc(auto_cfg(hide(docsrs))))]
 // Technically this crate doesn't need Rust `std`
 // but you'll still have to get the `libmagic` C library working for your target
 #![cfg_attr(not(test), no_std)]
