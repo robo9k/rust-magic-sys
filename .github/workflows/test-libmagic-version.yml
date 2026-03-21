@@ -13,7 +13,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        version: ["5.39", "5.40", "5.41", "5.42", "5.43", "5.44", "5.45", "5.46"]
+        version: ["5.39", "5.40", "5.41", "5.42", "5.43", "5.44", "5.45", "5.46", "5.47"]
       fail-fast: false
     runs-on: ubuntu-24.04
     steps:
