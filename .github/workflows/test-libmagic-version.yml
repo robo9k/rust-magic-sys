@@ -94,7 +94,7 @@ jobs:
           RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
           CRATE_LIBMAGIC_VERSION_FEATURE: ${{ steps.release.outputs.feature }}
 
-      - run: cargo test --locked --all-targets --features "${CRATE_LIBMAGIC_VERSION_FEATURE}" --verbose
+      - run: cargo test --verbose --verbose --locked --all-targets --features "${CRATE_LIBMAGIC_VERSION_FEATURE}"
         env:
           RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
           CRATE_LIBMAGIC_VERSION_FEATURE: ${{ steps.release.outputs.feature }}
