@@ -34,6 +34,8 @@ v5-40 = []
 v5-44 = ["v5-40"]
 ## Enable `libmagic` v5.45 API
 v5-45 = ["v5-44"]
+## Enable `libmagic` v5.46 API
+v5-46 = ["v5-45"]
 
 [build-dependencies]
 ## Enable build using `pkg-config`
@@ -53,7 +55,7 @@ x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
 msrv = "1.64.0"
 
 [package.metadata.docs.rs]
-features = ["v5-45"]
+features = ["v5-46"]
 no-default-features = true
 targets = []
 rustdoc-args = ["--cfg", "docsrs"]

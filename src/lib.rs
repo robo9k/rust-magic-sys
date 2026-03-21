@@ -10,6 +10,7 @@
 //! - `v5-40` — Enable [`libmagic` v5.40 API](#libmagic-v540)
 //! - `v5-44` — Enable [`libmagic` v5.44 API](#libmagic-v544)
 //! - `v5-45` — Enable [`libmagic` v5.45 API](#libmagic-v545)
+//! - `v5-46` — Enable [`libmagic` v5.45 API](#libmagic-v546)
 //!
 //!
 //! # `libmagic` changelog
@@ -56,7 +57,7 @@
 //!
 //! ## `libmagic` v5.46
 //!
-//! No API changes.
+//! Add [`MAGIC_PARAM_MAGWARN_MAX`].  
 //!
 //! ## `libmagic` v5.47
 //!
@@ -174,6 +175,8 @@ pub const MAGIC_PARAM_ENCODING_MAX: c_int = 7;
 #[cfg_attr(docsrs, doc(cfg(feature = "v5-45")))]
 #[cfg(feature = "v5-45")]
 pub const MAGIC_PARAM_ELF_SHSIZE_MAX: c_int = 8;
+#[cfg(feature = "v5-46")]
+pub const MAGIC_PARAM_MAGWARN_MAX: c_int = 9;
 
 // NOTE: the following are from `file.h`, but part of `magic.h` API
 pub const FILE_LOAD: c_int = 0;

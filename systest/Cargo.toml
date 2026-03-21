@@ -10,6 +10,7 @@ publish = false
 v5-40 = ["magic-sys/v5-40"]
 v5-44 = ["magic-sys/v5-44"]
 v5-45 = ["magic-sys/v5-45"]
+v5-46 = ["magic-sys/v5-46"]
 
 [dependencies]
 libc = "0.2"
