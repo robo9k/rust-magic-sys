@@ -40,7 +40,8 @@ jobs:
 
       - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1 # v2.8.1 
 
-      - uses: ./.github/actions/setup-libmagic
+      - id: setup-libmagic
+        uses: ./.github/actions/setup-libmagic
 
       - uses: taiki-e/install-action@7fe7b8c79a3c5569643cf27dfc32456883a4cd4d # v2.62.16
         with:
@@ -48,6 +49,10 @@ jobs:
           tool: cargo-msrv@0.18.4
 
       - run: cargo msrv --version
-      - run: cargo msrv verify --output-format json -- cargo test --locked --all-targets --all-features
+      - run: cargo msrv verify --output-format json -- cargo test --locked --all-targets --features "${FEATURES}"
+        env:
+          FEATURES: ${{ steps.setup-libmagic.outputs.crate-features }}
       - if: ${{ failure() }}
-        run: cargo msrv find --output-format json -- cargo test --locked --all-targets --all-features
+        run: cargo msrv find --output-format json -- cargo test --locked --all-targets --features "${FEATURES}"
+        env:
+          FEATURES: ${{ steps.setup-libmagic.outputs.crate-features }}
