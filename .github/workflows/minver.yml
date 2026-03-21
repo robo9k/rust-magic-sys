@@ -27,7 +27,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: ./.github/actions/setup-libmagic
+      - id: setup-libmagic
+        uses: ./.github/actions/setup-libmagic
 
       - id: toolchain
         uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd41383119e8b1b35921 # doesn't have usual versioned releases/tags
@@ -57,5 +58,9 @@ jobs:
       - run: cargo hack --version
       - run: cargo minimal-versions --version
 
-      - run: cargo minimal-versions build --verbose --verbose --all-targets --all-features
-      - run: cargo minimal-versions test --all-targets --all-features
+      - run: cargo minimal-versions build --verbose --verbose --all-targets --features "${FEATURES}"
+        env:
+          FEATURES: ${{ steps.setup-libmagic.outputs.crate-features }}
+      - run: cargo minimal-versions test --all-targets --features "${FEATURES}"
+        env:
+          FEATURES: ${{ steps.setup-libmagic.outputs.crate-features }}
