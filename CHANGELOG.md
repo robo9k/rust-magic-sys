@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3](https://github.com/robo9k/rust-magic-sys/compare/v0.4.2...v0.4.3) - 2026-03-21
+
+### Fixed
+
+- Add missing `MAGIC_PARAM_MAGWARN_MAX`  
+  Docs previously claimed compatibility with `libmagic` v5.46 without including this API change
+
+### Other
+
+- Document compatibility with `libmagic` v5.47
+
 ## [0.4.2](https://github.com/robo9k/rust-magic-sys/compare/v0.4.1...v0.4.2) - 2025-10-02
 
 ### Other
