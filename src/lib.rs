@@ -411,5 +411,26 @@ mod tests {
                 magic_close(mgc);
             }
         }
+
+        #[cfg(feature = "v5-46")]
+        {
+            let mgc = unsafe { magic_open(MAGIC_NONE) };
+            assert_ne!(mgc, std::ptr::null_mut());
+
+            let mut val: size_t = 0;
+
+            let rv = unsafe {
+                magic_getparam(
+                    mgc,
+                    MAGIC_PARAM_MAGWARN_MAX,
+                    &mut val as *mut size_t as *mut _,
+                )
+            };
+            assert_ne!(rv, -1);
+
+            unsafe {
+                magic_close(mgc);
+            }
+        }
     }
 }
