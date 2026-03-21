@@ -16,7 +16,7 @@
 //!
 //! The following is a subset of `libmagic` changes that are relevant for this `magic-sys` crate.
 //!
-//! `magic-sys` implements `libmagic` API v5.38 ..= v5.46.  
+//! `magic-sys` implements `libmagic` API v5.38 ..= v5.47.  
 //! `magic-sys` requires `libmagic` v5.39 or any newer version to build.  
 //!
 //! ## `libmagic` v5.38
@@ -55,6 +55,10 @@
 //! Change [`MAGIC_NO_CHECK_BUILTIN`].  
 //!
 //! ## `libmagic` v5.46
+//!
+//! No API changes.
+//!
+//! ## `libmagic` v5.47
 //!
 //! No API changes.
 //!
