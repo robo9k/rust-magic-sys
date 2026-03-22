@@ -109,7 +109,7 @@ fn main() -> ExitCode {
     eprintln!(
         "the pkg-config and vcpkg features are both disabled, \
         this configuration requires you to override the build script: \
-        https://crates.io/crates/magic#override"
+        https://crates.io/crates/magic-sys#override"
     );
 
     eprintln!("could not link to `libmagic`");
