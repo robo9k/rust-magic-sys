@@ -10,7 +10,7 @@
 //! - `v5-40` — Enable [`libmagic` v5.40 API](#libmagic-v540)
 //! - `v5-44` — Enable [`libmagic` v5.44 API](#libmagic-v544)
 //! - `v5-45` — Enable [`libmagic` v5.45 API](#libmagic-v545)
-//! - `v5-46` — Enable [`libmagic` v5.45 API](#libmagic-v546)
+//! - `v5-46` — Enable [`libmagic` v5.46 API](#libmagic-v546)
 //!
 //!
 //! # `libmagic` changelog
