@@ -2,9 +2,9 @@
 //!
 //! ## Build features
 //! - `pkg-config` (_enabled by default_) — Enable build using [`pkg-config`](https://www.freedesktop.org/wiki/Software/pkg-config/) with the [`pkg-config` crate](https://docs.rs/pkg-config)  
-//!   Check the [crate README for `pkg-config` configuration details](https://crates.io/crates/magic#pkg-config)
+//!   Check the [crate README for `pkg-config` configuration details](https://crates.io/crates/magic-sys#pkg-config)
 //! - `vcpkg` (_enabled by default_) — Enable build using [`vcpkg`](https://vcpkg.io/) with the [`vcpkg` crate](https://docs.rs/vcpkg)  
-//!   Check the [crate README for `vcpkg` configuration details](https://crates.io/crates/magic#vcpkg)
+//!   Check the [crate README for `vcpkg` configuration details](https://crates.io/crates/magic-sys#vcpkg)
 //!
 //! ## `libmagic` API features
 //! - `v5-40` — Enable [`libmagic` v5.40 API](#libmagic-v540)
