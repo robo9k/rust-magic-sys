@@ -31,4 +31,6 @@
     prBodyNotes: ":warning: MAJOR update; might require additional testing or planning to use new features",
   },
   prConcurrentLimit: 3,
+  minimumReleaseAge: "14d",
+  internalChecksFilter: "strict",
 }
