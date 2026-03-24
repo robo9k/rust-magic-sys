@@ -26,4 +26,8 @@
     },
   ],
   dependencyDashboardLabels: ["dependency"],
+  major: {
+    draftPR: true,
+    prBodyNotes: ":warning: MAJOR update; might require additional testing or planning to use new features",
+  },
 }
