@@ -2,6 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
     "config:best-practices",
+    ":label(dependency)",
+    ":enableVulnerabilityAlertsWithAdditionalLabel(vulnerability)",
     ":semanticCommits",
     "robo9k/renovate-config:crateSemanticCommitTypeFix",
   ],
