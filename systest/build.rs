@@ -1,9 +1,10 @@
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut cfg = ctest::TestGenerator::new();
 
     cfg.header("magic.h");
 
-    cfg.rust_version(1, 64, 0); // hardcoded MSRV
+    // note that is the edition of systest, not magic-sys
+    cfg.edition(2024);
 
     if let Some(s) = std::env::var_os("DEP_MAGIC_INCLUDE") {
         cfg.include(s);
@@ -13,12 +14,14 @@ fn main() {
     cfg.flag("-U_FORTIFY_SOURCE");
 
     cfg.skip_const(
-        |s| s.starts_with("FILE_"), // not actually part of magic.h but defined manually for use as `action` with `magic_getpath`
+        |s| s.ident().starts_with("FILE_"), // not actually part of magic.h but defined manually for use as `action` with `magic_getpath`
     );
 
     cfg.skip_struct(
-        |s| s == ("magic_set"), // opaque, can't test size / align / roundtrip
+        |s| s.ident() == ("magic_set"), // opaque, can't test size / align / roundtrip
     );
 
-    cfg.generate("../src/lib.rs", "all.rs");
+    ctest::generate_test(&mut cfg, "../src/lib.rs", "all.rs")?;
+
+    Ok(())
 }
