@@ -17,4 +17,4 @@ libc = "0.2"
 magic-sys = { path = ".." }
 
 [build-dependencies]
-ctest = "0.4"
+ctest = "0.5"
