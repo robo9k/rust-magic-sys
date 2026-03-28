@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4](https://github.com/robo9k/rust-magic-sys/compare/v0.4.3...v0.4.4) - 2026-03-28
+
+### Other
+
+- *(deps)* Update pinned rev for `vcpkg` to fix CI build errors
+- Fix links to own crate README on crates.io
+- Fix version text in link to `libmagic` changelog
+
 ## [0.4.3](https://github.com/robo9k/rust-magic-sys/compare/v0.4.2...v0.4.3) - 2026-03-21
 
 ### Fixed
