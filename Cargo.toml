@@ -45,7 +45,7 @@ vcpkg = { version = "0.2.15", optional = true }
 
 [package.metadata.vcpkg]
 git = "https://github.com/microsoft/vcpkg"
-rev = "a0f974c66a1c56e974d37b5707e312742aead974" # https://github.com/microsoft/vcpkg/pull/43635
+rev = "b6ebb6b65b9d2c388582c2d252963f37b1aad18a" # https://github.com/microsoft/vcpkg/pull/48281
 dependencies = ["libmagic"]
 
 [package.metadata.vcpkg.target]
