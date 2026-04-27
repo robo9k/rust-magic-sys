@@ -43,7 +43,7 @@ jobs:
       - id: setup-libmagic
         uses: ./.github/actions/setup-libmagic
 
-      - uses: taiki-e/install-action@06203676c62f0d3c765be3f2fcfbebbcb02d09f5 # v2.69.6
+      - uses: taiki-e/install-action@d0f23220b09a75c6db730f13bb37c4f8144b4382 # v2.75.9
         with:
           # renovate: taiki-e/install-action
           tool: cargo-msrv@0.19.0
